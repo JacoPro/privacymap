@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Map</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            height: 600px;
+            cursor: grab;
+        }
+
+        .map-container.dragging {
+            cursor: grabbing;
+        }
+
+        .world-map {
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            pointer-events: none;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: all;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .zoom-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .zoom-btn:hover {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .map-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+            max-width: 200px;
+        }
+
+        .map-info div {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>World Privacy Map</h1>
+        <div class="map-container">
+            <img src="world.svg" alt="World Map"
+                 style="border: 1px solid #ddd; border-radius: 4px; width: 100%; height: 600px; object-fit: contain;"
+                 class="world-map" id="world-map">
+            <div class="map-overlay" id="map-overlay"></div>
+
+            <div class="zoom-controls">
+                <div class="zoom-btn" id="zoom-in" title="Zoom In">+</div>
+                <div class="zoom-btn" id="zoom-out" title="Zoom Out">−</div>
+                <div class="zoom-btn" id="reset-view" title="Reset View">⌂</div>
+            </div>
+
+            <div class="map-info">
+                <div>🖱️ <strong>Drag</strong> to move map</div>
+                <div>🔍 <strong>Scroll</strong> to zoom</div>
+                <div>🎯 <strong>Hover</strong> countries</div>
+                <div>⌂ <strong>Reset</strong> to center</div>
+            </div>
+        </div>
+        <div class="controls">
+            <p>Interactive world map ready for privacy features</p>
+        </div>
+    </div>
+
+    <script>
+        // Zoom functionality
+        let currentScale = 1;
+        let currentX = 0;
+        let currentY = 0;
+
+        const worldMap = document.getElementById('world-map');
+        const mapContainer = document.querySelector('.map-container');
+        const mapOverlay = document.getElementById('map-overlay');
+
+        function updateTransform() {
+            // Get container and image dimensions
+            const containerRect = mapContainer.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+
+            // Calculate scaled image dimensions
+            const scaledWidth = containerWidth * currentScale;
+            const scaledHeight = containerHeight * currentScale;
+
+            // Calculate maximum allowed translation
+            const maxX = Math.max(0, (scaledWidth - containerWidth) / 2);
+            const maxY = Math.max(0, (scaledHeight - containerHeight) / 2);
+
+            // Constrain translation within bounds
+            currentX = Math.max(-maxX, Math.min(maxX, currentX));
+            currentY = Math.max(-maxY, Math.min(maxY, currentY));
+
+            worldMap.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+        }
+
+        // Zoom controls
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            currentScale = Math.min(currentScale * 1.2, 3);
+            updateTransform();
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            currentScale = Math.max(currentScale / 1.2, 1.0);
+            updateTransform();
+        });
+
+        document.getElementById('reset-view').addEventListener('click', () => {
+            currentScale = 1;
+            currentX = 0;
+            currentY = 0;
+            updateTransform();
+        });
+
+        // Mouse wheel zoom
+        mapOverlay.addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            const rect = mapContainer.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+            const newScale = currentScale * zoomFactor;
+
+            if (newScale >= 1.0 && newScale <= 3) {
+                // Zoom towards mouse position
+                const scaleDiff = newScale - currentScale;
+                currentX -= (mouseX - rect.width / 2 - currentX) * scaleDiff / currentScale;
+                currentY -= (mouseY - rect.height / 2 - currentY) * scaleDiff / currentScale;
+                currentScale = newScale;
+                updateTransform();
+            }
+        });
+
+        // Enhanced drag to pan functionality
+        let isDragging = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+
+        mapOverlay.addEventListener('mousedown', (e) => {
+            // Only start dragging with left mouse button
+            if (e.button === 0) {
+                isDragging = true;
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                mapContainer.classList.add('dragging');
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+
+            currentX += deltaX;
+            currentY += deltaY;
+
+            updateTransform();
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.button === 0) {
+                isDragging = false;
+                mapContainer.classList.remove('dragging');
+            }
+        });
+
+        // Prevent context menu on right-click to avoid interfering with drag
+        mapOverlay.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Handle mouse leave to stop dragging if mouse leaves the window
+        document.addEventListener('mouseleave', () => {
+            isDragging = false;
+            mapContainer.classList.remove('dragging');
+        });
+
+        console.log('Map loaded with zoom and pan controls');
+    </script>
+</body>
+</html>
