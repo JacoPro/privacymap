@@ -1146,7 +1146,7 @@
         });
 
         // Mouse wheel zoom
-        mapContainer.addEventListener('wheel', (e) => {
+        worldMap.addEventListener('wheel', (e) => {
             e.preventDefault();
 
             const rect = mapContainer.getBoundingClientRect();
@@ -1171,9 +1171,9 @@
         let lastMouseX = 0;
         let lastMouseY = 0;
 
-        mapContainer.addEventListener('mousedown', (e) => {
-            // Only start dragging with left mouse button and not on path elements
-            if (e.button === 0 && e.target === mapContainer) {
+        worldMap.addEventListener('mousedown', (e) => {
+            // Only start dragging with left mouse button and not on zoom controls
+            if (e.button === 0 && !e.target.closest('.zoom-controls') && !e.target.closest('.map-info')) {
                 isDragging = true;
                 lastMouseX = e.clientX;
                 lastMouseY = e.clientY;
@@ -1205,7 +1205,7 @@
         });
 
         // Prevent context menu on right-click to avoid interfering with drag
-        mapContainer.addEventListener('contextmenu', (e) => {
+        worldMap.addEventListener('contextmenu', (e) => {
             e.preventDefault();
         });
 
@@ -1225,27 +1225,26 @@
             const countryId = path.getAttribute('id');
             const countryName = path.getAttribute('name');
 
-            let selector = '';
+            // Remove existing hover effects
+            worldMap.querySelectorAll('path.country-hover').forEach(p => {
+                p.classList.remove('country-hover');
+            });
+
             if (countryClass) {
                 // For countries with class names (multi-part countries)
-                selector = `.${countryClass}`;
-            } else if (countryId) {
-                // For countries with only ID (single-part countries)
-                selector = `#${countryId}`;
-            }
-
-            if (selector) {
-                // Remove existing hover effects
-                worldMap.querySelectorAll('path.country-hover').forEach(p => {
-                    p.classList.remove('country-hover');
-                });
-
-                // Add hover effect to all parts of the country
-                worldMap.querySelectorAll(selector).forEach(countryPath => {
+                // Use attribute selector to handle class names with spaces
+                const countryPaths = worldMap.querySelectorAll(`path[class="${countryClass}"]`);
+                countryPaths.forEach(countryPath => {
                     countryPath.classList.add('country-hover');
                 });
-
-                console.log(`Hovering over: ${countryName || countryClass || countryId}`);
+                console.log(`Hovering over: ${countryName || countryClass} (${countryPaths.length} parts)`);
+            } else if (countryId) {
+                // For countries with only ID (single-part countries)
+                const countryPath = worldMap.querySelector(`#${countryId}`);
+                if (countryPath) {
+                    countryPath.classList.add('country-hover');
+                    console.log(`Hovering over: ${countryName || countryId}`);
+                }
             }
         }
 
