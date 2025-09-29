@@ -1488,37 +1488,79 @@
             if (path.tagName !== 'path') return;
 
             // Get the country identifier (class name or id)
-            const countryClass = path.className.baseVal || path.getAttribute('class');
+            const fullClassName = path.className.baseVal || path.getAttribute('class');
             const countryId = path.getAttribute('id');
             const countryName = path.getAttribute('name');
 
             // Remove existing hover effects
             worldMap.querySelectorAll('path.country-hover').forEach(p => {
                 p.classList.remove('country-hover');
+                p.style.fill = ''; // Reset custom fill
             });
 
-            if (countryClass) {
+            let countryCode = '';
+            let countryPaths = [];
+
+            if (fullClassName) {
+                // Handle multi-word country names by removing 'country-hover' class
+                const countryClass = fullClassName.replace(/\bcountry-hover\b/g, '').trim();
+                countryCode = countryClass;
                 // For countries with class names (multi-part countries)
-                // Use attribute selector to handle class names with spaces
-                const countryPaths = worldMap.querySelectorAll(`path[class="${countryClass}"]`);
-                countryPaths.forEach(countryPath => {
-                    countryPath.classList.add('country-hover');
-                });
+                countryPaths = worldMap.querySelectorAll(`path[class="${countryClass}"]`);
                 console.log(`Hovering over: ${countryName || countryClass} (${countryPaths.length} parts)`);
             } else if (countryId) {
+                // Map country IDs to our data structure keys
+                const countryIdMap = {
+                    'CH': 'Switzerland',
+                    'DE': 'Germany',
+                    'FR': 'France',
+                    'US': 'United States',
+                    'GB': 'United Kingdom'
+                };
+                countryCode = countryIdMap[countryId] || countryId;
                 // For countries with only ID (single-part countries)
                 const countryPath = worldMap.querySelector(`#${countryId}`);
                 if (countryPath) {
-                    countryPath.classList.add('country-hover');
+                    countryPaths = [countryPath];
                     console.log(`Hovering over: ${countryName || countryId}`);
                 }
             }
+
+            if (countryPaths.length > 0) {
+                // Get hover color based on current layer score
+                const hoverColor = getHoverColorForCountry(countryCode, currentLayer);
+
+                countryPaths.forEach(countryPath => {
+                    countryPath.classList.add('country-hover');
+                    if (hoverColor) {
+                        countryPath.style.fill = hoverColor;
+                    }
+                });
+            }
+        }
+
+        function getHoverColorForCountry(countryCode, layer) {
+            const countryData = privacyData.countries[countryCode];
+            if (!countryData || !countryData[layer]) {
+                return '#676278'; // Default hover color
+            }
+
+            const category = countryData[layer].category;
+            const categoryColors = {
+                'excellent': '#28a745',
+                'good': '#6cb2eb',
+                'fair': '#ffc107',
+                'poor': '#dc3545'
+            };
+
+            return categoryColors[category] || '#676278';
         }
 
         function handleCountryLeave(e) {
             // Remove hover effect from all paths
             worldMap.querySelectorAll('path.country-hover').forEach(path => {
                 path.classList.remove('country-hover');
+                path.style.fill = ''; // Reset custom fill
             });
         }
 
@@ -1531,24 +1573,54 @@
             if (path.tagName !== 'path') return;
 
             // Get the country identifier (class name or id)
-            const countryClass = path.className.baseVal || path.getAttribute('class');
+            const fullClassName = path.className.baseVal || path.getAttribute('class');
             const countryId = path.getAttribute('id');
             const countryName = path.getAttribute('name');
 
             let countryCode = '';
             let displayName = '';
 
-            if (countryClass) {
-                countryCode = countryClass;
-                displayName = countryName || countryClass;
+            console.log(`Click debug - fullClassName: "${fullClassName}", countryId: "${countryId}", countryName: "${countryName}"`);
+
+            // Map country IDs to our data structure keys
+            const countryIdMap = {
+                'CH': 'Switzerland',
+                'DE': 'Germany',
+                'FR': 'France',
+                'US': 'United States',
+                'GB': 'United Kingdom',
+                'EG': 'Egypt'
+            };
+
+            // Handle multi-word country names by removing 'country-hover' class
+            const cleanClassName = fullClassName ? fullClassName.replace(/\bcountry-hover\b/g, '').trim() : '';
+
+            if (cleanClassName) {
+                // Country has a class name (like "Italy", "United States")
+                countryCode = cleanClassName;
+                displayName = countryName || cleanClassName;
             } else if (countryId) {
-                countryCode = countryId;
-                displayName = countryName || countryId;
+                // Country uses ID only (like Switzerland: id="CH", Egypt: id="EG")
+                countryCode = countryIdMap[countryId] || countryId;
+                displayName = countryName || countryCode;
             }
 
+            console.log(`Click result - countryCode: "${countryCode}", displayName: "${displayName}"`);
+
             if (countryCode) {
+                // Check if country exists in our data
+                const hasData = privacyData.countries[countryCode];
+                console.log(`Country "${countryCode}" has data: ${!!hasData}`);
+
                 showCountryPanel(countryCode, displayName);
                 console.log(`Selected country: ${displayName} (${countryCode})`);
+            } else {
+                console.warn(`No country code found for clicked element. Element details:`, {
+                    tagName: path.tagName,
+                    className: fullClassName,
+                    id: countryId,
+                    name: countryName
+                });
             }
         }
 
@@ -1577,6 +1649,203 @@
 
         // Add layer dropdown event listener
         layerDropdown.addEventListener('change', handleLayerChange);
+
+        // Data management - embedded to avoid CORS issues
+        const privacyData = {
+            "countries": {
+                "Italy": {
+                    "privacy_freedom": {
+                        "score": 7.2,
+                        "category": "good",
+                        "description": "Strong GDPR protection with moderate surveillance concerns. Generally respects digital rights but has some data retention laws.",
+                        "sources": ["Privacy International", "Freedom House", "EFF"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 6.8,
+                        "category": "fair",
+                        "description": "Good access to streaming services with some geo-blocking. Local content laws may affect availability.",
+                        "sources": ["Streaming Availability", "EU Digital Single Market"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 8.1,
+                        "category": "excellent",
+                        "description": "Strong consumer protection under EU law. Comprehensive digital rights framework with effective enforcement.",
+                        "sources": ["European Commission", "EDPB", "Italian DPA"],
+                        "last_updated": "2024-12"
+                    }
+                },
+                "Switzerland": {
+                    "privacy_freedom": {
+                        "score": 9.1,
+                        "category": "excellent",
+                        "description": "World-leading privacy laws with strong constitutional protections. Minimal surveillance and excellent data protection.",
+                        "sources": ["Privacy International", "Freedom House"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 7.9,
+                        "category": "good",
+                        "description": "Good streaming access with high-quality infrastructure. Some geo-blocking due to licensing.",
+                        "sources": ["Swiss Media Authority"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 8.7,
+                        "category": "excellent",
+                        "description": "Strong consumer protection with privacy-first approach. Well-balanced regulation without overreach.",
+                        "sources": ["Swiss Federal Data Protection Authority"],
+                        "last_updated": "2024-12"
+                    }
+                },
+                "Germany": {
+                    "privacy_freedom": {
+                        "score": 8.3,
+                        "category": "excellent",
+                        "description": "Very strong privacy protections with constitutional basis. GDPR pioneer with robust enforcement.",
+                        "sources": ["Privacy International", "BfDI", "Freedom House"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 7.1,
+                        "category": "good",
+                        "description": "Good streaming access with strong local content requirements. Some platform restrictions.",
+                        "sources": ["German Media Authority"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 8.9,
+                        "category": "excellent",
+                        "description": "Comprehensive digital regulation framework. Leading EU enforcement with strong consumer focus.",
+                        "sources": ["Bundesnetzagentur", "BfDI"],
+                        "last_updated": "2024-12"
+                    }
+                },
+                "United States": {
+                    "privacy_freedom": {
+                        "score": 5.4,
+                        "category": "fair",
+                        "description": "Mixed privacy landscape with strong tech sector but limited federal protections. State-level initiatives emerging.",
+                        "sources": ["EFF", "Privacy International", "Freedom House"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 9.2,
+                        "category": "excellent",
+                        "description": "World's largest entertainment market with extensive streaming options and content creation.",
+                        "sources": ["FCC", "Streaming Industry Reports"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 6.2,
+                        "category": "fair",
+                        "description": "Evolving regulatory framework with sectoral approach. Strong innovation focus but gaps in consumer protection.",
+                        "sources": ["FTC", "State Attorneys General"],
+                        "last_updated": "2024-12"
+                    }
+                },
+                "United Kingdom": {
+                    "privacy_freedom": {
+                        "score": 7.6,
+                        "category": "good",
+                        "description": "Strong data protection post-Brexit with UK GDPR. Concerns about surveillance powers and online safety laws.",
+                        "sources": ["Privacy International", "ICO", "Freedom House"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 8.1,
+                        "category": "excellent",
+                        "description": "Strong entertainment sector with good streaming access. Local content requirements and BBC presence.",
+                        "sources": ["Ofcom", "UK Streaming Reports"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 7.8,
+                        "category": "good",
+                        "description": "Comprehensive regulatory approach with Online Safety Act. Strong enforcement but concerns about overreach.",
+                        "sources": ["CMA", "Ofcom", "ICO"],
+                        "last_updated": "2024-12"
+                    }
+                },
+                "France": {
+                    "privacy_freedom": {
+                        "score": 7.8,
+                        "category": "good",
+                        "description": "Strong GDPR implementation with active enforcement. Some surveillance concerns but good constitutional protections.",
+                        "sources": ["CNIL", "Privacy International", "Freedom House"],
+                        "last_updated": "2024-12"
+                    },
+                    "entertainment": {
+                        "score": 7.3,
+                        "category": "good",
+                        "description": "Strong local content focus with cultural protection policies. Good streaming access with French quotas.",
+                        "sources": ["ARCOM", "French Media Authority"],
+                        "last_updated": "2024-12"
+                    },
+                    "online_regulations": {
+                        "score": 8.4,
+                        "category": "excellent",
+                        "description": "Comprehensive digital regulation with strong enforcement. Pioneer in platform taxation and content moderation.",
+                        "sources": ["CNIL", "ARCOM", "DGCCRF"],
+                        "last_updated": "2024-12"
+                    }
+                }
+            },
+            "recommendations": {
+                "privacy_freedom": {
+                    "Italy": ["Switzerland", "Germany", "Netherlands"],
+                    "United States": ["Switzerland", "Germany", "Netherlands"],
+                    "United Kingdom": ["Switzerland", "Germany", "France"],
+                    "Germany": ["Switzerland", "Netherlands"],
+                    "France": ["Switzerland", "Germany", "Netherlands"],
+                    "Switzerland": []
+                },
+                "entertainment": {
+                    "Italy": ["United States", "United Kingdom", "Germany"],
+                    "Switzerland": ["United States", "United Kingdom", "Germany"],
+                    "Germany": ["United States", "United Kingdom", "France"],
+                    "United States": [],
+                    "United Kingdom": ["United States", "Germany"],
+                    "France": ["United States", "United Kingdom", "Germany"]
+                },
+                "online_regulations": {
+                    "Italy": ["Germany", "France", "Switzerland"],
+                    "United States": ["Germany", "France", "Switzerland"],
+                    "United Kingdom": ["Germany", "France", "Switzerland"],
+                    "Germany": ["Switzerland", "France"],
+                    "France": ["Germany", "Switzerland"],
+                    "Switzerland": ["Germany", "France"]
+                }
+            },
+            "metadata": {
+                "version": "1.0",
+                "last_updated": "2024-12-15",
+                "sources": ["Privacy International", "Freedom House", "EFF", "EDPB"]
+            }
+        };
+
+        // Load privacy data (now just logs since it's embedded)
+        function loadPrivacyData() {
+            console.log('Privacy data loaded successfully:', privacyData.metadata);
+            return Promise.resolve(privacyData);
+        }
+
+        // Get country data for specific layer
+        function getCountryData(countryCode, layer) {
+            if (!privacyData || !privacyData.countries[countryCode]) {
+                return null;
+            }
+            return privacyData.countries[countryCode][layer] || null;
+        }
+
+        // Get country recommendations for specific layer
+        function getCountryRecommendations(countryCode, layer) {
+            if (!privacyData || !privacyData.recommendations[layer]) {
+                return [];
+            }
+            return privacyData.recommendations[layer][countryCode] || [];
+        }
 
         // Bottom panel management - initialize after DOM is ready
         let countryPanel, countryNameEl, countryScoreBadge, layerIndicator, layerDetails, nearbySuggestions, suggestionCountries, closePanel;
@@ -1651,33 +1920,38 @@
                 return;
             }
 
-            // Placeholder content - will be replaced with real data
-            const mockData = {
-                score: 7.5,
-                details: 'This is placeholder content for ' + currentLayer + ' layer. Real data will be loaded from our data structure.',
-                suggestions: ['CH', 'NL', 'SE']
-            };
+            // Get real data for the country and current layer
+            const countryData = getCountryData(countryCode, currentLayer);
+            const recommendations = getCountryRecommendations(countryCode, currentLayer);
 
-            // Update score badge
-            const scoreClass = mockData.score >= 8 ? 'excellent' :
-                             mockData.score >= 6 ? 'good' :
-                             mockData.score >= 4 ? 'fair' : 'poor';
+            if (!countryData) {
+                // Fallback for countries not in our dataset
+                countryScoreBadge.textContent = 'N/A';
+                countryScoreBadge.className = 'score-badge poor';
+                layerDetails.textContent = `No data available for ${countryCode} in the ${currentLayer.replace('_', ' ')} layer. Data is currently limited to major countries and will be expanded.`;
+                nearbySuggestions.style.display = 'none';
+                return;
+            }
 
-            countryScoreBadge.textContent = mockData.score.toFixed(1);
+            // Update score badge with real data
+            const scoreClass = countryData.category; // excellent, good, fair, poor
+            countryScoreBadge.textContent = countryData.score.toFixed(1);
             countryScoreBadge.className = `score-badge ${scoreClass}`;
 
-            // Update details
-            layerDetails.textContent = mockData.details;
+            // Update details with real description
+            layerDetails.textContent = countryData.description;
 
-            // Update suggestions
-            if (mockData.suggestions.length > 0) {
-                suggestionCountries.innerHTML = mockData.suggestions
+            // Update suggestions with real recommendations
+            if (recommendations.length > 0) {
+                suggestionCountries.innerHTML = recommendations
                     .map(country => `<span class="suggestion-country">${country}</span>`)
                     .join('');
                 nearbySuggestions.style.display = 'block';
             } else {
                 nearbySuggestions.style.display = 'none';
             }
+
+            console.log(`Updated panel for ${countryCode} - ${currentLayer}:`, countryData);
         }
 
         function updatePanelForLayer() {
@@ -1725,10 +1999,10 @@
                 countryCode = 'Germany';
                 countryName = 'Germany';
             } else if (timezone.includes('Europe/Amsterdam') || locale.startsWith('nl')) {
-                countryCode = 'NL';
+                countryCode = 'Netherlands';
                 countryName = 'Netherlands';
             } else if (timezone.includes('Europe/Zurich') || locale.startsWith('de-CH')) {
-                countryCode = 'CH';
+                countryCode = 'Switzerland';
                 countryName = 'Switzerland';
             } else if (locale.startsWith('en-US') || timezone.includes('America/')) {
                 countryCode = 'United States';
@@ -1739,7 +2013,12 @@
             return { countryCode, countryName };
         }
 
-        setTimeout(() => {
+        // Initialize everything
+        async function initializeMap() {
+            // Load privacy data first
+            await loadPrivacyData();
+
+            // Initialize panel elements
             initializePanelElements();
 
             // Detect and show user's country by default
@@ -1750,7 +2029,10 @@
             setTimeout(() => {
                 centerOnCountry(userLocation.countryCode, 6);
             }, 100);
-        }, 500);
+        }
+
+        // Start initialization after DOM is ready
+        setTimeout(initializeMap, 500);
 
         console.log('Map loaded with zoom, pan, multi-part country hover, layer selection, and bottom panel support');
     </script>
