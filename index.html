@@ -1416,7 +1416,7 @@
             const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
             const newScale = currentScale * zoomFactor;
 
-            if (newScale >= 1.0 && newScale <= 5) {
+            if (newScale >= 1.0 && newScale <= 25) {
                 // Zoom towards mouse position
                 const scaleDiff = newScale - currentScale;
                 currentX -= (mouseX - rect.width / 2 - currentX) * scaleDiff / currentScale;
