@@ -7,24 +7,26 @@
     <style>
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background: #16141C;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: white;
             margin-bottom: 20px;
+            font-weight: 300;
+            font-size: 2.5rem;
         }
 
         .map-container {
@@ -33,7 +35,7 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
-            height: 600px;
+            height: 100vh;
             cursor: grab;
         }
 
@@ -42,12 +44,12 @@
         }
 
         .world-map {
-            transition: transform 0.3s ease;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform-origin: center center;
             border: 1px solid #ddd;
             border-radius: 4px;
             width: 100%;
-            height: 600px;
+            height: 100vh;
             object-fit: contain;
         }
 
@@ -57,8 +59,8 @@
         }
 
         .world-map path.country-hover {
-            fill-opacity: 0.7 !important;
-            filter: brightness(1.3);
+            fill: #676278 !important;
+            fill-opacity: 1 !important;
         }
 
         .zoom-controls {
@@ -74,8 +76,8 @@
         .zoom-btn {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #ddd;
+            background: rgba(30, 32, 34, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -83,53 +85,248 @@
             justify-content: center;
             font-weight: bold;
             font-size: 18px;
-            color: #333;
+            color: white;
             transition: all 0.2s ease;
             user-select: none;
+            backdrop-filter: blur(10px);
         }
 
         .zoom-btn:hover {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(30, 32, 34, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .controls {
             text-align: center;
             margin-top: 20px;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .map-info {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(30, 32, 34, 0.9);
             padding: 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 12px;
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             max-width: 200px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
         }
 
         .map-info div {
             margin: 2px 0;
         }
+
+        .layer-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .layer-dropdown {
+            background: rgba(30, 32, 34, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            min-width: 200px;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 36px;
+            backdrop-filter: blur(10px);
+        }
+
+        .layer-dropdown:hover {
+            background: rgba(30, 32, 34, 1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .layer-dropdown:focus {
+            outline: none;
+            border-color: #6cb2eb;
+            box-shadow: 0 0 0 2px rgba(108, 178, 235, 0.3);
+        }
+
+        .country-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 15%;
+            width: 70%;
+            height: 280px;
+            background: rgba(30, 32, 34, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            z-index: 200;
+            transform: translateY(calc(100% + 40px));
+            transition: transform 0.3s ease-in-out;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+
+        .country-panel.visible {
+            transform: translateY(0);
+        }
+
+        .country-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .country-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+        }
+
+        .country-score {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+        }
+
+        .score-badge.excellent { background: #28a745; }
+        .score-badge.good { background: #6cb2eb; }
+        .score-badge.fair { background: #ffc107; }
+        .score-badge.poor { background: #dc3545; }
+
+        .layer-indicator {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-left: 10px;
+        }
+
+        .country-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .detail-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #6cb2eb;
+        }
+
+        .detail-title {
+            font-weight: bold;
+            color: white;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-content {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .nearby-suggestions {
+            background: rgba(107, 178, 235, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #6cb2eb;
+        }
+
+        .suggestions-title {
+            font-weight: bold;
+            color: #6cb2eb;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .suggestion-countries {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-country {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .close-panel:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>World Privacy Map</h1>
         <div class="map-container">
- <svg baseprofile="tiny" fill="#ececec" height="857" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" version="1.2" viewbox="0 0 2000 857" width="2000" xmlns="http://www.w3.org/2000/svg" class="world-map" id="world-map">
+            <div class="layer-selector">
+                <select class="layer-dropdown" id="layer-dropdown">
+                    <option value="privacy_freedom">🔒 Privacy & Freedom</option>
+                    <option value="entertainment">🎬 Entertainment</option>
+                    <option value="online_regulations">⚖️ Online Regulations</option>
+                </select>
+            </div>
+
+ <svg baseprofile="tiny" fill="#3E3A4A" height="857" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width=".2" version="1.2" viewbox="0 0 2000 857" width="2000" xmlns="http://www.w3.org/2000/svg" class="world-map" id="world-map">
  <style type="text/css">
  path {
      transition: all 0.2s ease;
      cursor: pointer;
  }
  path.country-hover {
-     fill-opacity: 0.7 !important;
-     filter: brightness(1.3);
+     fill: #676278 !important;
+     fill-opacity: 1 !important;
  }
  </style>
   <path d="M1383 261.6l1.5 1.8-2.9 0.8-2.4 1.1-5.9 0.8-5.3 1.3-2.4 2.8 1.9 2.7 1.4 3.2-2 2.7 0.8 2.5-0.9 2.3-5.2-0.2 3.1 4.2-3.1 1.7-1.4 3.8 1.1 3.9-1.8 1.8-2.1-0.6-4 0.9-0.2 1.7-4.1 0-2.3 3.7 0.8 5.4-6.6 2.7-3.9-0.6-0.9 1.4-3.4-0.8-5.3 1-9.6-3.3 3.9-5.8-1.1-4.1-4.3-1.1-1.2-4.1-2.7-5.1 1.6-3.5-2.5-1 0.5-4.7 0.6-8 5.9 2.5 3.9-0.9 0.4-2.9 4-0.9 2.6-2-0.2-5.1 4.2-1.3 0.3-2.2 2.9 1.7 1.6 0.2 3 0 4.3 1.4 1.8 0.7 3.4-2 2.1 1.2 0.9-2.9 3.2 0.1 0.6-0.9-0.2-2.6 1.7-2.2 3.3 1.4-0.1 2 1.7 0.3 0.9 5.4 2.7 2.1 1.5-1.4 2.2-0.6 2.5-2.9 3.8 0.5 5.4 0z" id="AF" name="Afghanistan">
@@ -1093,7 +1290,6 @@
             </div>
         </div>
         <div class="controls">
-            <p>Interactive world map with multi-part country hover support</p>
         </div>
     </div>
 
@@ -1127,9 +1323,73 @@
             worldMap.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
         }
 
+        // Function to center map on a specific country with zoom
+        function centerOnCountry(countryCode, zoomLevel = 4) {
+            console.log(`Attempting to center on: ${countryCode}`);
+
+            // Find all country elements by class name
+            const countryElements = worldMap.querySelectorAll(`path[class="${countryCode}"]`);
+
+            if (countryElements.length === 0) {
+                console.log(`Country element not found for: ${countryCode}`);
+                return;
+            }
+
+            console.log(`Found ${countryElements.length} country elements`);
+
+            // For Italy, find the largest polygon (mainland) to center on
+            let largestElement = countryElements[0];
+            let largestArea = 0;
+
+            countryElements.forEach((element, index) => {
+                const bbox = element.getBBox();
+                const area = bbox.width * bbox.height;
+                console.log(`Element ${index}: area = ${area}, bbox:`, bbox);
+
+                if (area > largestArea) {
+                    largestArea = area;
+                    largestElement = element;
+                }
+            });
+
+            console.log(`Using largest element for centering`);
+
+            // Get the bounding box of the largest (mainland) part
+            const bbox = largestElement.getBBox();
+            console.log(`Largest country bbox:`, bbox);
+
+            const centerX = bbox.x + bbox.width / 2;
+            const centerY = bbox.y + bbox.height / 2;
+            console.log(`Country center: (${centerX}, ${centerY})`);
+
+            // Get container dimensions
+            const containerRect = mapContainer.getBoundingClientRect();
+            console.log(`Container dimensions:`, containerRect);
+
+            // Calculate the offset needed to center the country
+            // Adjust for panel height - move country towards upper part of screen
+            const svgCenterX = 2000 / 2; // SVG viewbox center X
+            const svgCenterY = 857 / 3;  // Position country in upper third to avoid panel
+
+            const offsetX = (svgCenterX - centerX) * zoomLevel;
+            const offsetY = (svgCenterY - centerY) * zoomLevel;
+
+            console.log(`Calculated offsets: (${offsetX}, ${offsetY})`);
+
+            // Set the new transform values
+            currentScale = zoomLevel;
+            currentX = offsetX;
+            currentY = offsetY;
+
+            // Apply the transform
+            updateTransform();
+
+            console.log(`Centered on ${countryCode} with ${zoomLevel}x zoom`);
+        }
+
         // Zoom controls
         document.getElementById('zoom-in').addEventListener('click', () => {
-            currentScale = Math.min(currentScale * 1.2, 3);
+            currentScale = Math.min(currentScale * 1.2, 25);
             updateTransform();
         });
 
@@ -1156,7 +1416,7 @@
             const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
             const newScale = currentScale * zoomFactor;
 
-            if (newScale >= 1.0 && newScale <= 3) {
+            if (newScale >= 1.0 && newScale <= 5) {
                 // Zoom towards mouse position
                 const scaleDiff = newScale - currentScale;
                 currentX -= (mouseX - rect.width / 2 - currentX) * scaleDiff / currentScale;
@@ -1255,11 +1515,267 @@
             });
         }
 
-        // Add event listeners for country hover
+        // Country click functionality
+        function handleCountryClick(e) {
+            // Don't trigger click if we were dragging
+            if (isDragging) return;
+
+            const path = e.target;
+            if (path.tagName !== 'path') return;
+
+            // Get the country identifier (class name or id)
+            const countryClass = path.className.baseVal || path.getAttribute('class');
+            const countryId = path.getAttribute('id');
+            const countryName = path.getAttribute('name');
+
+            let countryCode = '';
+            let displayName = '';
+
+            if (countryClass) {
+                countryCode = countryClass;
+                displayName = countryName || countryClass;
+            } else if (countryId) {
+                countryCode = countryId;
+                displayName = countryName || countryId;
+            }
+
+            if (countryCode) {
+                showCountryPanel(countryCode, displayName);
+                console.log(`Selected country: ${displayName} (${countryCode})`);
+            }
+        }
+
+        // Add event listeners for country hover and click
         worldMap.addEventListener('mouseover', handleCountryHover);
         worldMap.addEventListener('mouseout', handleCountryLeave);
+        worldMap.addEventListener('click', handleCountryClick);
 
-        console.log('Map loaded with zoom, pan, and multi-part country hover support');
+        // Layer management
+        let currentLayer = 'privacy_freedom';
+        const layerDropdown = document.getElementById('layer-dropdown');
+
+        function handleLayerChange(e) {
+            currentLayer = e.target.value;
+            console.log(`Switched to layer: ${currentLayer}`);
+
+            // TODO: Update country colors based on new layer
+            // TODO: Update bottom panel if a country is selected
+
+            // Visual feedback for layer change
+            layerDropdown.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                layerDropdown.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Add layer dropdown event listener
+        layerDropdown.addEventListener('change', handleLayerChange);
+
+        // Bottom panel management - initialize after DOM is ready
+        let countryPanel, countryNameEl, countryScoreBadge, layerIndicator, layerDetails, nearbySuggestions, suggestionCountries, closePanel;
+        let selectedCountry = null;
+
+        function initializePanelElements() {
+            countryPanel = document.getElementById('country-panel');
+            countryNameEl = document.getElementById('country-name');
+            countryScoreBadge = document.getElementById('country-score-badge');
+            layerIndicator = document.getElementById('layer-indicator');
+            layerDetails = document.getElementById('layer-details');
+            nearbySuggestions = document.getElementById('nearby-suggestions');
+            suggestionCountries = document.getElementById('suggestion-countries');
+            closePanel = document.getElementById('close-panel');
+
+            // Set up close button event listener
+            if (closePanel) {
+                closePanel.addEventListener('click', hideCountryPanel);
+            }
+
+            console.log('Panel elements initialized:', {
+                countryPanel: !!countryPanel,
+                countryNameEl: !!countryNameEl,
+                layerIndicator: !!layerIndicator
+            });
+        }
+
+        function showCountryPanel(countryCode, countryName) {
+            // Check if elements exist
+            if (!countryPanel || !countryNameEl || !layerIndicator) {
+                console.error('Panel elements not found:', {
+                    countryPanel: !!countryPanel,
+                    countryNameEl: !!countryNameEl,
+                    layerIndicator: !!layerIndicator
+                });
+                return;
+            }
+
+            selectedCountry = countryCode;
+            countryNameEl.textContent = countryName || 'Unknown Country';
+
+            // Update layer indicator
+            const layerNames = {
+                'privacy_freedom': 'Privacy & Freedom',
+                'entertainment': 'Entertainment',
+                'online_regulations': 'Online Regulations'
+            };
+            layerIndicator.textContent = layerNames[currentLayer];
+
+            // TODO: Load actual country data based on countryCode and currentLayer
+            // For now, show placeholder content
+            updatePanelContent(countryCode);
+
+            // Show panel
+            countryPanel.classList.add('visible');
+        }
+
+        function hideCountryPanel() {
+            countryPanel.classList.remove('visible');
+            selectedCountry = null;
+        }
+
+        function updatePanelContent(countryCode) {
+            // Check if elements exist
+            if (!countryScoreBadge || !layerDetails || !suggestionCountries || !nearbySuggestions) {
+                console.error('Panel content elements not found:', {
+                    countryScoreBadge: !!countryScoreBadge,
+                    layerDetails: !!layerDetails,
+                    suggestionCountries: !!suggestionCountries,
+                    nearbySuggestions: !!nearbySuggestions
+                });
+                return;
+            }
+
+            // Placeholder content - will be replaced with real data
+            const mockData = {
+                score: 7.5,
+                details: 'This is placeholder content for ' + currentLayer + ' layer. Real data will be loaded from our data structure.',
+                suggestions: ['CH', 'NL', 'SE']
+            };
+
+            // Update score badge
+            const scoreClass = mockData.score >= 8 ? 'excellent' :
+                             mockData.score >= 6 ? 'good' :
+                             mockData.score >= 4 ? 'fair' : 'poor';
+
+            countryScoreBadge.textContent = mockData.score.toFixed(1);
+            countryScoreBadge.className = `score-badge ${scoreClass}`;
+
+            // Update details
+            layerDetails.textContent = mockData.details;
+
+            // Update suggestions
+            if (mockData.suggestions.length > 0) {
+                suggestionCountries.innerHTML = mockData.suggestions
+                    .map(country => `<span class="suggestion-country">${country}</span>`)
+                    .join('');
+                nearbySuggestions.style.display = 'block';
+            } else {
+                nearbySuggestions.style.display = 'none';
+            }
+        }
+
+        function updatePanelForLayer() {
+            if (selectedCountry) {
+                updatePanelContent(selectedCountry);
+                // Update layer indicator
+                const layerNames = {
+                    'privacy_freedom': 'Privacy & Freedom',
+                    'entertainment': 'Entertainment',
+                    'online_regulations': 'Online Regulations'
+                };
+                layerIndicator.textContent = layerNames[currentLayer];
+            }
+        }
+
+        // Close panel functionality is now set up in initializePanelElements()
+
+        // Update handleLayerChange to refresh panel
+        const originalHandleLayerChange = handleLayerChange;
+        handleLayerChange = function(e) {
+            originalHandleLayerChange(e);
+            updatePanelForLayer();
+        };
+
+        // Initialize panel elements and detect user's country
+        function detectUserCountry() {
+            // Simple timezone-based country detection (no precise location needed)
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const locale = navigator.language || navigator.userLanguage;
+
+            // Basic country mapping from timezone and locale
+            let countryCode = 'United States'; // Default fallback
+            let countryName = 'United States';
+
+            if (timezone.includes('Europe/Rome') || locale.startsWith('it')) {
+                countryCode = 'Italy';
+                countryName = 'Italy';
+            } else if (timezone.includes('Europe/London') || locale.startsWith('en-GB')) {
+                countryCode = 'United Kingdom';
+                countryName = 'United Kingdom';
+            } else if (timezone.includes('Europe/Paris') || locale.startsWith('fr')) {
+                countryCode = 'France';
+                countryName = 'France';
+            } else if (timezone.includes('Europe/Berlin') || locale.startsWith('de')) {
+                countryCode = 'Germany';
+                countryName = 'Germany';
+            } else if (timezone.includes('Europe/Amsterdam') || locale.startsWith('nl')) {
+                countryCode = 'NL';
+                countryName = 'Netherlands';
+            } else if (timezone.includes('Europe/Zurich') || locale.startsWith('de-CH')) {
+                countryCode = 'CH';
+                countryName = 'Switzerland';
+            } else if (locale.startsWith('en-US') || timezone.includes('America/')) {
+                countryCode = 'United States';
+                countryName = 'United States';
+            }
+
+            console.log(`Detected user location: ${countryName} (${countryCode}) based on timezone: ${timezone}, locale: ${locale}`);
+            return { countryCode, countryName };
+        }
+
+        setTimeout(() => {
+            initializePanelElements();
+
+            // Detect and show user's country by default
+            const userLocation = detectUserCountry();
+            showCountryPanel(userLocation.countryCode, userLocation.countryName);
+
+            // Center the map on the detected user's country with closer zoom
+            setTimeout(() => {
+                centerOnCountry(userLocation.countryCode, 6);
+            }, 100);
+        }, 500);
+
+        console.log('Map loaded with zoom, pan, multi-part country hover, layer selection, and bottom panel support');
     </script>
+
+    <!-- Country Information Panel -->
+    <div class="country-panel" id="country-panel">
+        <div class="country-panel-header">
+            <div>
+                <h2 class="country-name" id="country-name">Select a country</h2>
+                <div class="country-score">
+                    <span class="score-badge" id="country-score-badge">No data</span>
+                    <span class="layer-indicator" id="layer-indicator">Privacy & Freedom</span>
+                </div>
+            </div>
+            <button class="close-panel" id="close-panel" title="Close panel">×</button>
+        </div>
+
+        <div class="country-details" id="country-details">
+            <div class="detail-section">
+                <div class="detail-title">Layer Information</div>
+                <div class="detail-content" id="layer-details">
+                    Click on a country to see detailed information for the selected layer.
+                </div>
+            </div>
+        </div>
+
+        <div class="nearby-suggestions" id="nearby-suggestions" style="display: none;">
+            <div class="suggestions-title">Better nearby options for this layer:</div>
+            <div class="suggestion-countries" id="suggestion-countries">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
