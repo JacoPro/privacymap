@@ -1367,12 +1367,19 @@
             console.log(`Container dimensions:`, containerRect);
 
             // Calculate the offset needed to center the country
-            // Adjust for panel height - move country towards upper part of screen
+            // Adjust for panel height - account for 280px panel + 40px margin = 320px
             const svgCenterX = 2000 / 2; // SVG viewbox center X
-            const svgCenterY = 857 / 3;  // Position country in upper third to avoid panel
+            const svgCenterY = 857 / 2;  // Start with normal center
+
+            // Adjust Y position upward to account for panel at bottom
+            const panelHeight = 320; // Panel + margins in pixels
+            const viewportHeight = containerRect.height;
+            const adjustmentRatio = panelHeight / viewportHeight; // How much of screen is taken by panel
+            const svgAdjustment = 857 * adjustmentRatio * 0.25; // Move up by quarter of the panel ratio
+            const adjustedSvgCenterY = svgCenterY - svgAdjustment;
 
             const offsetX = (svgCenterX - centerX) * zoomLevel;
-            const offsetY = (svgCenterY - centerY) * zoomLevel;
+            const offsetY = (adjustedSvgCenterY - centerY) * zoomLevel;
 
             console.log(`Calculated offsets: (${offsetX}, ${offsetY})`);
 
