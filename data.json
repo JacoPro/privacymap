@@ -1,0 +1,688 @@
+{
+  "countries": {
+    "Italy": {
+      "privacy_freedom": {
+        "score": 7.2,
+        "category": "good",
+        "description": "Strong GDPR protection with moderate surveillance concerns. Generally respects digital rights but has some data retention laws.",
+        "details": {
+          "data_protection": "Full GDPR compliance, strong individual rights",
+          "surveillance": "Moderate government surveillance, some data retention requirements",
+          "encryption": "Legal for personal use, some restrictions for businesses",
+          "internet_freedom": "Generally free with occasional content blocking"
+        },
+        "sources": ["Privacy International", "Freedom House", "EFF"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 6.8,
+        "category": "fair",
+        "description": "Good access to streaming services with some geo-blocking. Local content laws may affect availability.",
+        "details": {
+          "streaming_access": "Most major platforms available",
+          "geo_blocking": "Some content restrictions",
+          "local_content": "EU content quotas apply",
+          "censorship": "Minimal content censorship"
+        },
+        "sources": ["Streaming Availability", "EU Digital Single Market"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.1,
+        "category": "excellent",
+        "description": "Strong consumer protection under EU law. Comprehensive digital rights framework with effective enforcement.",
+        "details": {
+          "consumer_protection": "Strong EU-wide protections",
+          "digital_rights": "Comprehensive GDPR and DSA compliance",
+          "platform_regulation": "Active enforcement of digital services",
+          "e_commerce": "Well-regulated online marketplace"
+        },
+        "sources": ["European Commission", "EDPB", "Italian DPA"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Switzerland": {
+      "privacy_freedom": {
+        "score": 9.1,
+        "category": "excellent",
+        "description": "World-leading privacy laws with strong constitutional protections. Minimal surveillance and excellent data protection.",
+        "details": {
+          "data_protection": "Federal Data Protection Act, very strong individual rights",
+          "surveillance": "Very limited government surveillance, strong warrant requirements",
+          "encryption": "No restrictions, strong cryptographic protections",
+          "internet_freedom": "Excellent, minimal restrictions"
+        },
+        "sources": ["Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.9,
+        "category": "good",
+        "description": "Good streaming access with high-quality infrastructure. Some geo-blocking due to licensing.",
+        "details": {
+          "streaming_access": "Most platforms available, excellent infrastructure",
+          "geo_blocking": "Some content restrictions due to licensing",
+          "local_content": "Swiss content promotion, not mandatory quotas",
+          "censorship": "Very minimal content restrictions"
+        },
+        "sources": ["Swiss Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.7,
+        "category": "excellent",
+        "description": "Strong consumer protection with privacy-first approach. Well-balanced regulation without overreach.",
+        "details": {
+          "consumer_protection": "Strong federal consumer protection laws",
+          "digital_rights": "Privacy-first approach, strong data rights",
+          "platform_regulation": "Balanced approach, not overly restrictive",
+          "e_commerce": "Well-regulated with consumer focus"
+        },
+        "sources": ["Swiss Federal Data Protection Authority"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Germany": {
+      "privacy_freedom": {
+        "score": 8.3,
+        "category": "excellent",
+        "description": "Very strong privacy protections with constitutional basis. GDPR pioneer with robust enforcement.",
+        "details": {
+          "data_protection": "GDPR + BDSG, constitutional privacy rights",
+          "surveillance": "Moderate surveillance with strong oversight",
+          "encryption": "Legal with some law enforcement exceptions",
+          "internet_freedom": "Generally excellent with hate speech restrictions"
+        },
+        "sources": ["Privacy International", "BfDI", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.1,
+        "category": "good",
+        "description": "Good streaming access with strong local content requirements. Some platform restrictions.",
+        "details": {
+          "streaming_access": "Major platforms available, some regional restrictions",
+          "geo_blocking": "EU portability rules apply",
+          "local_content": "Strong German content quotas",
+          "censorship": "Some content restrictions for hate speech"
+        },
+        "sources": ["German Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.9,
+        "category": "excellent",
+        "description": "Comprehensive digital regulation framework. Leading EU enforcement with strong consumer focus.",
+        "details": {
+          "consumer_protection": "Very strong federal and EU protections",
+          "digital_rights": "Leading GDPR enforcement, strong user rights",
+          "platform_regulation": "Active DSA enforcement, content moderation rules",
+          "e_commerce": "Comprehensive consumer protection framework"
+        },
+        "sources": ["Bundesnetzagentur", "BfDI"],
+        "last_updated": "2024-12"
+      }
+    },
+    "United States": {
+      "privacy_freedom": {
+        "score": 5.4,
+        "category": "fair",
+        "description": "Mixed privacy landscape with strong tech sector but limited federal protections. State-level initiatives emerging.",
+        "details": {
+          "data_protection": "Limited federal law, CCPA in California, sectoral approach",
+          "surveillance": "Extensive government surveillance capabilities",
+          "encryption": "Legal but ongoing policy debates",
+          "internet_freedom": "Generally good with some content moderation issues"
+        },
+        "sources": ["EFF", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 9.2,
+        "category": "excellent",
+        "description": "World's largest entertainment market with extensive streaming options and content creation.",
+        "details": {
+          "streaming_access": "Largest selection of platforms and content",
+          "geo_blocking": "Minimal restrictions for domestic users",
+          "local_content": "No mandated quotas, market-driven",
+          "censorship": "Very limited government censorship"
+        },
+        "sources": ["FCC", "Streaming Industry Reports"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 6.2,
+        "category": "fair",
+        "description": "Evolving regulatory framework with sectoral approach. Strong innovation focus but gaps in consumer protection.",
+        "details": {
+          "consumer_protection": "Sectoral approach, FTC enforcement",
+          "digital_rights": "Limited federal framework, state variations",
+          "platform_regulation": "Light-touch approach, Section 230 protections",
+          "e_commerce": "Well-developed but business-friendly framework"
+        },
+        "sources": ["FTC", "State Attorneys General"],
+        "last_updated": "2024-12"
+      }
+    },
+    "United Kingdom": {
+      "privacy_freedom": {
+        "score": 7.6,
+        "category": "good",
+        "description": "Strong data protection post-Brexit with UK GDPR. Concerns about surveillance powers and online safety laws.",
+        "details": {
+          "data_protection": "UK GDPR maintains high standards",
+          "surveillance": "Extensive surveillance powers, limited oversight",
+          "encryption": "Legal but under pressure from safety legislation",
+          "internet_freedom": "Good but declining due to online safety laws"
+        },
+        "sources": ["Privacy International", "ICO", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 8.1,
+        "category": "excellent",
+        "description": "Strong entertainment sector with good streaming access. Local content requirements and BBC presence.",
+        "details": {
+          "streaming_access": "Major platforms available, strong local content",
+          "geo_blocking": "Post-Brexit some EU content restrictions",
+          "local_content": "Ofcom quotas for British content",
+          "censorship": "Minimal with focus on harmful content"
+        },
+        "sources": ["Ofcom", "UK Streaming Reports"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 7.8,
+        "category": "good",
+        "description": "Comprehensive regulatory approach with Online Safety Act. Strong enforcement but concerns about overreach.",
+        "details": {
+          "consumer_protection": "Strong Competition and Markets Authority oversight",
+          "digital_rights": "Good but weakening due to safety focus",
+          "platform_regulation": "Online Safety Act creates new obligations",
+          "e_commerce": "Well-regulated consumer marketplace"
+        },
+        "sources": ["CMA", "Ofcom", "ICO"],
+        "last_updated": "2024-12"
+      }
+    },
+    "France": {
+      "privacy_freedom": {
+        "score": 7.8,
+        "category": "good",
+        "description": "Strong GDPR implementation with active enforcement. Some surveillance concerns but good constitutional protections.",
+        "details": {
+          "data_protection": "GDPR + French data protection law, active CNIL",
+          "surveillance": "Moderate surveillance with judicial oversight",
+          "encryption": "Legal with some law enforcement provisions",
+          "internet_freedom": "Good with some hate speech restrictions"
+        },
+        "sources": ["CNIL", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.3,
+        "category": "good",
+        "description": "Strong local content focus with cultural protection policies. Good streaming access with French quotas.",
+        "details": {
+          "streaming_access": "Major platforms with French content requirements",
+          "geo_blocking": "EU rules apply, some cultural protections",
+          "local_content": "Strong French content quotas",
+          "censorship": "Limited, focus on hate speech and extremism"
+        },
+        "sources": ["ARCOM", "French Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.4,
+        "category": "excellent",
+        "description": "Comprehensive digital regulation with strong enforcement. Pioneer in platform taxation and content moderation.",
+        "details": {
+          "consumer_protection": "Strong DGCCRF enforcement",
+          "digital_rights": "Active GDPR enforcement, digital rights focus",
+          "platform_regulation": "Leading DSA implementation, content moderation",
+          "e_commerce": "Well-regulated with strong consumer protections"
+        },
+        "sources": ["CNIL", "ARCOM", "DGCCRF"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Netherlands": {
+      "privacy_freedom": {
+        "score": 8.6,
+        "category": "excellent",
+        "description": "Leading GDPR enforcement with strong privacy culture. Excellent digital rights protections and minimal surveillance overreach.",
+        "details": {
+          "data_protection": "Strong GDPR implementation, active Dutch DPA",
+          "surveillance": "Limited surveillance with strong oversight",
+          "encryption": "No restrictions, privacy-first approach",
+          "internet_freedom": "Excellent, minimal content restrictions"
+        },
+        "sources": ["Dutch DPA", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.7,
+        "category": "good",
+        "description": "Good streaming access with EU portability. Strong local content support and minimal censorship.",
+        "details": {
+          "streaming_access": "Major platforms available, excellent infrastructure",
+          "geo_blocking": "EU portability rules apply",
+          "local_content": "Support for Dutch content, not mandatory",
+          "censorship": "Very minimal, focus only on illegal content"
+        },
+        "sources": ["Netherlands Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.5,
+        "category": "excellent",
+        "description": "Comprehensive consumer protection with balanced approach. Strong enforcement of digital rights without overreach.",
+        "details": {
+          "consumer_protection": "Strong ACM enforcement",
+          "digital_rights": "Leading GDPR enforcement, privacy-first",
+          "platform_regulation": "Balanced DSA implementation",
+          "e_commerce": "Well-regulated consumer marketplace"
+        },
+        "sources": ["ACM", "Dutch DPA"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Spain": {
+      "privacy_freedom": {
+        "score": 7.5,
+        "category": "good",
+        "description": "Strong GDPR compliance with active enforcement. Some concerns about surveillance laws but good constitutional protections.",
+        "details": {
+          "data_protection": "GDPR + Spanish data protection law, active AEPD",
+          "surveillance": "Moderate surveillance with judicial oversight",
+          "encryption": "Legal with some law enforcement exceptions",
+          "internet_freedom": "Good with some content restrictions"
+        },
+        "sources": ["AEPD", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.4,
+        "category": "good",
+        "description": "Good streaming access with strong local content. EU portability rules and growing Spanish content market.",
+        "details": {
+          "streaming_access": "Major platforms with Spanish content",
+          "geo_blocking": "EU rules apply",
+          "local_content": "Growing Spanish content quotas",
+          "censorship": "Limited, focus on hate speech"
+        },
+        "sources": ["CNMC", "Spanish Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 8.1,
+        "category": "excellent",
+        "description": "Strong consumer protection under EU framework. Active GDPR enforcement with comprehensive digital rights.",
+        "details": {
+          "consumer_protection": "Strong CNMC enforcement",
+          "digital_rights": "Active GDPR enforcement",
+          "platform_regulation": "Active DSA implementation",
+          "e_commerce": "Well-regulated consumer protections"
+        },
+        "sources": ["CNMC", "AEPD"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Canada": {
+      "privacy_freedom": {
+        "score": 7.9,
+        "category": "good",
+        "description": "Strong privacy laws with PIPEDA and provincial legislation. Some surveillance concerns but good oversight mechanisms.",
+        "details": {
+          "data_protection": "PIPEDA, provincial privacy laws, strong individual rights",
+          "surveillance": "Moderate surveillance with Privacy Commissioner oversight",
+          "encryption": "Legal for personal use, some business restrictions",
+          "internet_freedom": "Excellent, minimal restrictions"
+        },
+        "sources": ["Privacy Commissioner of Canada", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 8.3,
+        "category": "excellent",
+        "description": "Excellent streaming access with strong local content requirements. CRTC regulations promote Canadian content.",
+        "details": {
+          "streaming_access": "Major platforms available, Canadian content requirements",
+          "geo_blocking": "Some US content restrictions",
+          "local_content": "Strong Canadian content quotas (CanCon)",
+          "censorship": "Very minimal content restrictions"
+        },
+        "sources": ["CRTC", "Canadian Media Authority"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 7.7,
+        "category": "good",
+        "description": "Developing digital regulation framework. Strong consumer protection with Privacy Act modernization underway.",
+        "details": {
+          "consumer_protection": "Competition Bureau enforcement",
+          "digital_rights": "Evolving framework, Bill C-27 pending",
+          "platform_regulation": "Online Safety Act development",
+          "e_commerce": "Good consumer protection framework"
+        },
+        "sources": ["Competition Bureau", "Privacy Commissioner"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Australia": {
+      "privacy_freedom": {
+        "score": 6.8,
+        "category": "fair",
+        "description": "Moderate privacy protections with Privacy Act 1988. Concerns about surveillance laws and data retention requirements.",
+        "details": {
+          "data_protection": "Privacy Act 1988, weaker than GDPR standards",
+          "surveillance": "Extensive surveillance powers, data retention laws",
+          "encryption": "Legal but under pressure from law enforcement",
+          "internet_freedom": "Good but declining due to content laws"
+        },
+        "sources": ["OAIC", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.6,
+        "category": "good",
+        "description": "Good streaming access with local content requirements. ACMA regulations promote Australian content.",
+        "details": {
+          "streaming_access": "Major platforms with Australian content requirements",
+          "geo_blocking": "Some international content restrictions",
+          "local_content": "Australian content quotas enforced",
+          "censorship": "Some content restrictions, classification system"
+        },
+        "sources": ["ACMA", "Screen Australia"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 6.9,
+        "category": "fair",
+        "description": "Developing digital regulation with News Media Bargaining Code. Consumer protection improving but fragmented approach.",
+        "details": {
+          "consumer_protection": "ACCC enforcement, improving framework",
+          "digital_rights": "Limited framework, Privacy Act reform pending",
+          "platform_regulation": "News Media Bargaining Code, Online Safety Act",
+          "e_commerce": "Good consumer protection, ACCC active"
+        },
+        "sources": ["ACCC", "OAIC", "eSafety Commissioner"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Japan": {
+      "privacy_freedom": {
+        "score": 6.9,
+        "category": "fair",
+        "description": "Moderate privacy protections with Personal Information Protection Act. Some surveillance concerns and weak enforcement.",
+        "details": {
+          "data_protection": "Personal Information Protection Act, weaker than GDPR",
+          "surveillance": "Moderate government surveillance, limited oversight",
+          "encryption": "Legal with some restrictions for businesses",
+          "internet_freedom": "Good with some content restrictions"
+        },
+        "sources": ["Personal Information Protection Commission", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.2,
+        "category": "good",
+        "description": "Good streaming access with strong local content market. Some geo-blocking but growing international presence.",
+        "details": {
+          "streaming_access": "Major platforms available, strong anime/gaming content",
+          "geo_blocking": "Some content restrictions due to licensing",
+          "local_content": "Strong domestic content industry",
+          "censorship": "Some content restrictions, rating system"
+        },
+        "sources": ["Ministry of Internal Affairs and Communications"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 6.7,
+        "category": "fair",
+        "description": "Developing digital regulation framework. Consumer protection improving but enforcement challenges remain.",
+        "details": {
+          "consumer_protection": "Consumer Affairs Agency enforcement",
+          "digital_rights": "Limited framework, PIPA reform ongoing",
+          "platform_regulation": "Light-touch approach, transparency reports",
+          "e_commerce": "Good consumer protection framework"
+        },
+        "sources": ["Consumer Affairs Agency", "PIPC"],
+        "last_updated": "2024-12"
+      }
+    },
+    "South Korea": {
+      "privacy_freedom": {
+        "score": 6.4,
+        "category": "fair",
+        "description": "Personal Information Protection Act provides moderate protections. Concerns about surveillance and real-name requirements.",
+        "details": {
+          "data_protection": "PIPA provides moderate protections",
+          "surveillance": "Extensive surveillance capabilities, limited oversight",
+          "encryption": "Legal but regulated, crypto restrictions",
+          "internet_freedom": "Good but real-name requirements, content blocking"
+        },
+        "sources": ["PIPC", "Freedom House", "Privacy International"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 8.7,
+        "category": "excellent",
+        "description": "World-leading entertainment industry with K-pop, K-dramas, and gaming. Excellent streaming infrastructure.",
+        "details": {
+          "streaming_access": "Major platforms plus strong domestic services",
+          "geo_blocking": "Some restrictions but growing global reach",
+          "local_content": "World-class content creation industry",
+          "censorship": "Some content restrictions, rating system"
+        },
+        "sources": ["Korea Communications Commission"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 6.8,
+        "category": "fair",
+        "description": "Active digital regulation with focus on platform responsibilities. Strong consumer protection but some overreach concerns.",
+        "details": {
+          "consumer_protection": "Fair Trade Commission active enforcement",
+          "digital_rights": "PIPA framework, real-name requirements",
+          "platform_regulation": "Active regulation, transparency requirements",
+          "e_commerce": "Strong consumer protection framework"
+        },
+        "sources": ["KCC", "FTC Korea"],
+        "last_updated": "2024-12"
+      }
+    },
+    "China": {
+      "privacy_freedom": {
+        "score": 2.1,
+        "category": "poor",
+        "description": "Personal Information Protection Law exists but extensive surveillance state. Limited privacy rights and extensive data collection.",
+        "details": {
+          "data_protection": "PIPL provides limited protections, state access broad",
+          "surveillance": "Extensive surveillance state, social credit system",
+          "encryption": "Heavily regulated, state access requirements",
+          "internet_freedom": "Heavily censored, Great Firewall restrictions"
+        },
+        "sources": ["Freedom House", "Privacy International", "Amnesty International"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 5.8,
+        "category": "fair",
+        "description": "Large domestic entertainment market but heavy censorship. Limited access to international platforms.",
+        "details": {
+          "streaming_access": "Domestic platforms dominant, international platforms blocked",
+          "geo_blocking": "Extensive blocking of foreign content",
+          "local_content": "Strong domestic content industry, heavily regulated",
+          "censorship": "Extensive content censorship and regulation"
+        },
+        "sources": ["Cyberspace Administration of China"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 3.2,
+        "category": "poor",
+        "description": "Comprehensive regulatory framework prioritizes state control over consumer protection. Limited digital rights.",
+        "details": {
+          "consumer_protection": "Some consumer protections, limited enforcement",
+          "digital_rights": "Minimal digital rights, state surveillance priority",
+          "platform_regulation": "Extensive platform control, censorship requirements",
+          "e_commerce": "Regulated marketplace, consumer protection improving"
+        },
+        "sources": ["CAC", "SAMR"],
+        "last_updated": "2024-12"
+      }
+    },
+    "India": {
+      "privacy_freedom": {
+        "score": 5.6,
+        "category": "fair",
+        "description": "Personal Data Protection Bill pending. Right to privacy recognized but implementation challenges and surveillance concerns.",
+        "details": {
+          "data_protection": "PDP Bill pending, IT Rules provide some protections",
+          "surveillance": "Extensive surveillance capabilities, limited oversight",
+          "encryption": "Legal but under regulatory pressure",
+          "internet_freedom": "Declining, frequent internet shutdowns"
+        },
+        "sources": ["MEITY", "Freedom House", "Privacy International"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.8,
+        "category": "good",
+        "description": "Large and growing entertainment market with Bollywood and OTT platforms. Some content restrictions but diverse offerings.",
+        "details": {
+          "streaming_access": "Major platforms plus strong domestic OTT services",
+          "geo_blocking": "Some restrictions, growing local content",
+          "local_content": "Massive film industry, growing OTT content",
+          "censorship": "Some content restrictions, certification requirements"
+        },
+        "sources": ["Ministry of Information and Broadcasting"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 5.9,
+        "category": "fair",
+        "description": "Developing digital regulation framework with IT Rules 2021. Consumer protection improving but enforcement challenges.",
+        "details": {
+          "consumer_protection": "Consumer Protection Act 2019, CCPA enforcement",
+          "digital_rights": "Evolving framework, PDP Bill pending",
+          "platform_regulation": "IT Rules 2021, intermediary guidelines",
+          "e_commerce": "Growing regulation, consumer protection improving"
+        },
+        "sources": ["MEITY", "CCPA"],
+        "last_updated": "2024-12"
+      }
+    },
+    "Brazil": {
+      "privacy_freedom": {
+        "score": 7.1,
+        "category": "good",
+        "description": "Strong privacy protection with LGPD (Brazilian GDPR). Good data protection framework but some surveillance concerns.",
+        "details": {
+          "data_protection": "LGPD provides strong GDPR-like protections",
+          "surveillance": "Some surveillance concerns, judicial oversight improving",
+          "encryption": "Legal, Marco Civil da Internet protections",
+          "internet_freedom": "Good with Marco Civil da Internet framework"
+        },
+        "sources": ["ANPD", "Privacy International", "Freedom House"],
+        "last_updated": "2024-12"
+      },
+      "entertainment": {
+        "score": 7.9,
+        "category": "good",
+        "description": "Strong entertainment market with local productions and international streaming. Good access with local content quotas.",
+        "details": {
+          "streaming_access": "Major platforms with Brazilian content requirements",
+          "geo_blocking": "Some restrictions, strong local content",
+          "local_content": "Growing Brazilian content industry",
+          "censorship": "Constitutional protection, minimal restrictions"
+        },
+        "sources": ["ANCINE", "ANATEL"],
+        "last_updated": "2024-12"
+      },
+      "online_regulations": {
+        "score": 7.3,
+        "category": "good",
+        "description": "Marco Civil da Internet provides strong digital rights framework. Good consumer protection with active enforcement.",
+        "details": {
+          "consumer_protection": "Strong Procon enforcement, CDC protections",
+          "digital_rights": "Marco Civil da Internet, LGPD framework",
+          "platform_regulation": "Balanced approach, fake news legislation",
+          "e_commerce": "Strong consumer protection, CDC enforcement"
+        },
+        "sources": ["ANPD", "SENACON", "ANATEL"],
+        "last_updated": "2024-12"
+      }
+    }
+  },
+  "recommendations": {
+    "privacy_freedom": {
+      "Italy": ["Switzerland", "Netherlands", "Germany"],
+      "United States": ["Switzerland", "Netherlands", "Germany"],
+      "United Kingdom": ["Switzerland", "Netherlands", "Germany"],
+      "Germany": ["Switzerland", "Netherlands"],
+      "France": ["Switzerland", "Netherlands", "Germany"],
+      "Switzerland": ["Netherlands", "Germany"],
+      "Netherlands": ["Switzerland"],
+      "Spain": ["Switzerland", "Netherlands", "Germany"],
+      "Canada": ["Switzerland", "Netherlands", "Germany"],
+      "Australia": ["Switzerland", "Netherlands", "Germany"],
+      "Japan": ["Switzerland", "Netherlands", "Germany"],
+      "South Korea": ["Switzerland", "Netherlands", "Germany"],
+      "China": ["Switzerland", "Netherlands", "Germany"],
+      "India": ["Switzerland", "Netherlands", "Germany"],
+      "Brazil": ["Switzerland", "Netherlands", "Germany"]
+    },
+    "entertainment": {
+      "Italy": ["South Korea", "United States", "United Kingdom"],
+      "Switzerland": ["South Korea", "United States", "United Kingdom"],
+      "Germany": ["South Korea", "United States", "United Kingdom"],
+      "United States": ["South Korea", "United Kingdom"],
+      "United Kingdom": ["South Korea", "United States"],
+      "France": ["South Korea", "United States", "United Kingdom"],
+      "Netherlands": ["South Korea", "United States", "United Kingdom"],
+      "Spain": ["South Korea", "United States", "United Kingdom"],
+      "Canada": ["South Korea", "United States", "United Kingdom"],
+      "Australia": ["South Korea", "United States", "United Kingdom"],
+      "Japan": ["South Korea", "United States", "United Kingdom"],
+      "South Korea": ["United States"],
+      "China": ["South Korea", "United States", "Japan"],
+      "India": ["South Korea", "United States", "United Kingdom"],
+      "Brazil": ["South Korea", "United States", "United Kingdom"]
+    },
+    "online_regulations": {
+      "Italy": ["Germany", "Netherlands", "France"],
+      "United States": ["Germany", "Netherlands", "France"],
+      "United Kingdom": ["Germany", "Netherlands", "France"],
+      "Germany": ["Netherlands", "Switzerland"],
+      "France": ["Germany", "Netherlands"],
+      "Switzerland": ["Netherlands", "Germany"],
+      "Netherlands": ["Germany", "France"],
+      "Spain": ["Germany", "Netherlands", "France"],
+      "Canada": ["Germany", "Netherlands", "France"],
+      "Australia": ["Germany", "Netherlands", "France"],
+      "Japan": ["Germany", "Netherlands", "France"],
+      "South Korea": ["Germany", "Netherlands", "France"],
+      "China": ["Germany", "Netherlands", "France"],
+      "India": ["Germany", "Netherlands", "France"],
+      "Brazil": ["Germany", "Netherlands", "France"]
+    }
+  },
+  "metadata": {
+    "version": "2.0",
+    "last_updated": "2024-12-29",
+    "countries_total": 15,
+    "sources": [
+      "Privacy International - Global Privacy Ranking",
+      "Freedom House - Freedom on the Net",
+      "Electronic Frontier Foundation - Privacy Reports",
+      "European Data Protection Board",
+      "National Data Protection Authorities",
+      "OECD Digital Economy Reports",
+      "Regional Media Authorities",
+      "Consumer Protection Agencies"
+    ],
+    "methodology": "Scores based on weighted analysis of legal frameworks, enforcement, surveillance practices, and user rights protections. Entertainment scores consider streaming access, content diversity, and censorship levels. Online regulation scores evaluate consumer protection, digital rights enforcement, and platform accountability."
+  }
+}
