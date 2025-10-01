@@ -122,64 +122,31 @@
             margin: 2px 0;
         }
 
+        /* Layer selector removed - now only in country panel */
         .layer-selector {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-        }
-
-        .layer-dropdown {
-            background: rgba(30, 32, 34, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 14px;
-            font-weight: 500;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
-            min-width: 200px;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 16px;
-            padding-right: 36px;
-            backdrop-filter: blur(10px);
-        }
-
-        .layer-dropdown:hover {
-            background: rgba(30, 32, 34, 1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            transform: translateY(-1px);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .layer-dropdown:focus {
-            outline: none;
-            border-color: #6cb2eb;
-            box-shadow: 0 0 0 2px rgba(108, 178, 235, 0.3);
+            display: none;
         }
 
         .country-panel {
             position: fixed;
+            left: 360px;
+            right: 20px;
             bottom: 20px;
-            left: 15%;
-            width: 70%;
-            height: 280px;
-            background: rgba(30, 32, 34, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
-            padding: 20px;
-            z-index: 200;
+            height: auto;
+            max-height: 280px;
+            background: rgba(15, 18, 20, 0.98);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+            padding: 0;
+            z-index: 100;
             transform: translateY(calc(100% + 40px));
-            transition: transform 0.3s ease-in-out;
-            overflow-y: auto;
-            backdrop-filter: blur(10px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
             color: white;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
         }
 
         .country-panel.visible {
@@ -187,113 +154,285 @@
         }
 
         .country-panel-header {
+            flex-shrink: 0;
+            padding: 24px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 10px;
+            gap: 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 320px;
+        }
+
+        .country-header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .country-header-left {
+            flex: 1;
         }
 
         .country-name {
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 700;
             color: white;
+            margin: 0 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .layer-indicator {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .country-score-large {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            min-width: 90px;
+        }
+
+        .score-number {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
             margin: 0;
         }
 
-        .country-score {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .score-number.excellent { color: #28a745; }
+        .score-number.good { color: #6cb2eb; }
+        .score-number.fair { color: #ffc107; }
+        .score-number.poor { color: #dc3545; }
 
         .score-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 10px;
             color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
         .score-badge.excellent { background: #28a745; }
         .score-badge.good { background: #6cb2eb; }
-        .score-badge.fair { background: #ffc107; }
+        .score-badge.fair { background: #ffc107; color: #000; }
         .score-badge.poor { background: #dc3545; }
 
-        .layer-indicator {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-left: 10px;
+        .country-details {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-content: start;
         }
 
-        .country-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 15px;
+        .country-details::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .country-details::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .country-details::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .country-details::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .detail-section {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #6cb2eb;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            margin-bottom: 0;
+            border-left: none;
+        }
+
+        .info-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-stat-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .info-stat-value {
+            font-size: 16px;
+            color: white;
+            font-weight: 600;
         }
 
         .detail-title {
-            font-weight: bold;
-            color: white;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
         .detail-content {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .nearby-suggestions {
-            background: rgba(107, 178, 235, 0.2);
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 4px solid #6cb2eb;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border-left: none;
+            margin-bottom: 0;
+            grid-column: 1 / -1;
         }
 
         .suggestions-title {
-            font-weight: bold;
-            color: #6cb2eb;
-            margin-bottom: 8px;
-            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
         .suggestion-countries {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .suggestion-country {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 8px;
+            background: rgba(108, 178, 235, 0.2);
+            padding: 6px 12px;
             border-radius: 12px;
             font-size: 12px;
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(108, 178, 235, 0.4);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .suggestion-country:hover {
+            background: rgba(108, 178, 235, 0.4);
+            border-color: rgba(108, 178, 235, 0.6);
         }
 
         .close-panel {
-            background: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            font-size: 24px;
+            font-size: 20px;
             color: rgba(255, 255, 255, 0.6);
             cursor: pointer;
             padding: 0;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .close-panel:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* VPN Modal Styles */
+        .vpn-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .vpn-modal.visible {
+            display: flex;
+        }
+
+        .vpn-modal-content {
+            background: rgba(30, 32, 34, 0.98);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: white;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .vpn-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(108, 178, 235, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .vpn-modal-header h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #6cb2eb;
+        }
+
+        .close-vpn-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -301,9 +440,361 @@
             transition: all 0.2s ease;
         }
 
-        .close-panel:hover {
+        .close-vpn-modal:hover {
             color: white;
             background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .vpn-suggestion-card {
+            background: rgba(108, 178, 235, 0.15);
+            border: 1px solid rgba(108, 178, 235, 0.3);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .vpn-suggestion-card:hover {
+            background: rgba(108, 178, 235, 0.25);
+            border-color: rgba(108, 178, 235, 0.5);
+            transform: translateX(5px);
+        }
+
+        .vpn-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .vpn-country-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .vpn-action-btn {
+            background: #6cb2eb;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .vpn-action-btn:hover {
+            background: #5a9dd1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 178, 235, 0.4);
+        }
+
+        .vpn-card-reason {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .vpn-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .vpn-feature-tag {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.4);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #6cb2eb;
+            font-weight: 500;
+        }
+
+        /* Country List Panel Styles */
+        .country-list-panel {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 300px;
+            background: rgba(30, 32, 34, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            padding: 16px;
+            z-index: 150;
+            backdrop-filter: blur(10px);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            flex-shrink: 0;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+        }
+
+        .list-controls {
+            flex-shrink: 0;
+            margin-bottom: 15px;
+        }
+
+        .list-control-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sort-dropdown, .filter-input {
+            width: 100%;
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 13px;
+            color: white;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .sort-dropdown {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
+            padding-right: 32px;
+        }
+
+        .filter-input {
+            outline: none;
+        }
+
+        .filter-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sort-dropdown:hover, .filter-input:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .sort-dropdown:focus, .filter-input:focus {
+            border-color: #6cb2eb;
+            box-shadow: 0 0 0 2px rgba(108, 178, 235, 0.2);
+        }
+
+        .country-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            flex: 1;
+            padding-right: 4px;
+        }
+
+        .country-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .country-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .country-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        .country-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .country-list-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .country-list-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(3px);
+        }
+
+        .country-connect-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #6cb2eb;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 16px;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        .country-list-item:hover .country-connect-btn {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .country-connect-btn:hover {
+            background: #5a9dd1;
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .country-list-item.filtered {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .country-list-item.selected {
+            background: rgba(108, 178, 235, 0.2);
+            border-color: rgba(108, 178, 235, 0.5);
+        }
+
+        .country-flag {
+            font-size: 24px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .country-list-item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .country-list-item-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .country-list-item-score-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .country-list-item-score {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .country-list-item-badge {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .country-list-item-badge.excellent { background: #28a745; color: white; }
+        .country-list-item-badge.good { background: #6cb2eb; color: white; }
+        .country-list-item-badge.fair { background: #ffc107; color: #000; }
+        .country-list-item-badge.poor { background: #dc3545; color: white; }
+
+        .layer-dropdown-panel {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 13px;
+            color: white;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
+            padding-right: 32px;
+        }
+
+        .layer-dropdown-panel:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .layer-dropdown-panel:focus {
+            border-color: #6cb2eb;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(108, 178, 235, 0.2);
+        }
+
+        /* Feature Prompts Styles */
+        .feature-prompts {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-top: 0;
+        }
+
+        .feature-btn {
+            background: rgba(108, 178, 235, 0.2);
+            border: 1px solid rgba(108, 178, 235, 0.4);
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .feature-btn:hover {
+            background: rgba(108, 178, 235, 0.35);
+            border-color: rgba(108, 178, 235, 0.6);
+            transform: translateX(3px);
+        }
+
+        .feature-btn:active {
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -1327,71 +1818,117 @@
         function centerOnCountry(countryCode, zoomLevel = 4) {
             console.log(`Attempting to center on: ${countryCode}`);
 
-            // Find all country elements by class name
-            const countryElements = worldMap.querySelectorAll(`path[class="${countryCode}"]`);
+            // Reset to default view first
+            currentScale = 1;
+            currentX = 0;
+            currentY = 0;
+            updateTransform();
+
+            // Wait for reset animation, then zoom to country
+            setTimeout(() => {
+                // Try finding by class first (Italy, Japan use class)
+                let countryElements = document.querySelectorAll(`#world-map path.${countryCode}`);
+                console.log(`Found ${countryElements.length} elements with class="${countryCode}"`);
+
+            // If not found by class, try by ID
+            if (countryElements.length === 0) {
+                const countryNameToIdMap = {
+                    'Switzerland': 'CH',
+                    'Germany': 'DE',
+                    'France': 'FR',
+                    'United States': 'US',
+                    'United Kingdom': 'GB',
+                    'Egypt': 'EG',
+                    'China': 'CN',
+                    'South Korea': 'KR',
+                    'India': 'IN',
+                    'Brazil': 'BR',
+                    'Australia': 'AU',
+                    'Canada': 'CA',
+                    'Spain': 'ES',
+                    'Netherlands': 'NL'
+                };
+
+                const svgId = countryNameToIdMap[countryCode];
+                if (svgId) {
+                    countryElements = document.querySelectorAll(`#world-map path#${svgId}`);
+                    console.log(`Found ${countryElements.length} elements with id="${svgId}"`);
+                }
+            }
 
             if (countryElements.length === 0) {
                 console.log(`Country element not found for: ${countryCode}`);
                 return;
             }
 
-            console.log(`Found ${countryElements.length} country elements`);
-
-            // For Italy, find the largest polygon (mainland) to center on
+            // Find the largest polygon (mainland) to center on
             let largestElement = countryElements[0];
             let largestArea = 0;
 
-            countryElements.forEach((element, index) => {
+            countryElements.forEach((element) => {
                 const bbox = element.getBBox();
                 const area = bbox.width * bbox.height;
-                console.log(`Element ${index}: area = ${area}, bbox:`, bbox);
-
                 if (area > largestArea) {
                     largestArea = area;
                     largestElement = element;
                 }
             });
 
-            console.log(`Using largest element for centering`);
-
-            // Get the bounding box of the largest (mainland) part
+            // Get the bounding box in SVG coordinates
             const bbox = largestElement.getBBox();
-            console.log(`Largest country bbox:`, bbox);
+            const countryCenterX = bbox.x + bbox.width / 2;
+            const countryCenterY = bbox.y + bbox.height / 2;
 
-            const centerX = bbox.x + bbox.width / 2;
-            const centerY = bbox.y + bbox.height / 2;
-            console.log(`Country center: (${centerX}, ${centerY})`);
+            // SVG viewBox dimensions
+            const svgViewBoxWidth = 2000;
+            const svgViewBoxHeight = 857;
+
+            // Get the actual rendered SVG dimensions (accounting for aspect ratio)
+            const svgRect = worldMap.getBoundingClientRect();
+            const svgRenderedWidth = svgRect.width;
+            const svgRenderedHeight = svgRect.height;
 
             // Get container dimensions
             const containerRect = mapContainer.getBoundingClientRect();
-            console.log(`Container dimensions:`, containerRect);
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
 
-            // Calculate the offset needed to center the country
-            // Adjust for panel height - account for 280px panel + 40px margin = 320px
-            const svgCenterX = 2000 / 2; // SVG viewbox center X
-            const svgCenterY = 857 / 2;  // Start with normal center
+            // Account for left panel
+            const leftPanelWidth = 340;
+            const availableWidth = containerWidth - leftPanelWidth;
 
-            // Adjust Y position upward to account for panel at bottom
-            const panelHeight = 320; // Panel + margins in pixels
-            const viewportHeight = containerRect.height;
-            const adjustmentRatio = panelHeight / viewportHeight; // How much of screen is taken by panel
-            const svgAdjustment = 857 * adjustmentRatio * 0.25; // Move up by quarter of the panel ratio
-            const adjustedSvgCenterY = svgCenterY - svgAdjustment;
+            // Target position (center of available viewport)
+            const targetX = leftPanelWidth + (availableWidth / 2);
+            const targetY = containerHeight / 2;
 
-            const offsetX = (svgCenterX - centerX) * zoomLevel;
-            const offsetY = (adjustedSvgCenterY - centerY) * zoomLevel;
+            // The country center in rendered pixel coordinates (on the unzoomed SVG element)
+            const countryPixelX = (countryCenterX / svgViewBoxWidth) * svgRenderedWidth;
+            const countryPixelY = (countryCenterY / svgViewBoxHeight) * svgRenderedHeight;
 
-            console.log(`Calculated offsets: (${offsetX}, ${offsetY})`);
-
-            // Set the new transform values
+            // Set zoom level
             currentScale = zoomLevel;
-            currentX = offsetX;
-            currentY = offsetY;
 
-            // Apply the transform
-            updateTransform();
+            // After transform `translate(currentX, currentY) scale(currentScale)`:
+            // A point at pixel (px, py) on the SVG ends up at viewport position:
+            // viewportX = (px + currentX) * currentScale
+            // viewportY = (py + currentY) * currentScale
+            //
+            // We want the country center to end up at targetX, targetY:
+            // targetX = (countryPixelX + currentX) * currentScale
+            // Solving for currentX:
+            // currentX = (targetX / currentScale) - countryPixelX
+            currentX = (targetX / currentScale) - countryPixelX;
+            currentY = (targetY / currentScale) - countryPixelY;
 
-            console.log(`Centered on ${countryCode} with ${zoomLevel}x zoom`);
+                console.log(`Centering ${countryCode}:`);
+                console.log(`  SVG viewBox coords: (${countryCenterX.toFixed(1)}, ${countryCenterY.toFixed(1)})`);
+                console.log(`  Rendered pixel coords: (${countryPixelX.toFixed(1)}, ${countryPixelY.toFixed(1)})`);
+                console.log(`  Target viewport: (${targetX.toFixed(1)}, ${targetY.toFixed(1)})`);
+                console.log(`  Scale: ${currentScale}, Translation: (${currentX.toFixed(2)}, ${currentY.toFixed(2)})`);
+
+                // Apply the transform
+                updateTransform();
+            }, 600); // Wait for reset animation to complete
         }
 
         // Zoom controls
@@ -2671,8 +3208,91 @@
                         "Consumer Protection Agencies"
                 ],
                 "methodology": "Scores based on weighted analysis of legal frameworks, enforcement, surveillance practices, and user rights protections. Entertainment scores consider streaming access, content diversity, and censorship levels. Online regulation scores evaluate consumer protection, digital rights enforcement, and platform accountability."
+        },
+        "vpn_recommendations": {
+                "privacy_freedom": {
+                        "Italy": {
+                                "reason": "Your privacy score is good but could be better. Connect to countries with excellent privacy laws to enhance your online security.",
+                                "destinations": [
+                                        { "country": "Switzerland", "features": ["Secure Core", "Kill Switch"], "reason": "World-leading privacy laws, no surveillance alliances" },
+                                        { "country": "Netherlands", "features": ["Kill Switch"], "reason": "Strong GDPR enforcement, privacy-first culture" },
+                                        { "country": "Germany", "features": ["Secure Core"], "reason": "Constitutional privacy rights, robust enforcement" }
+                                ]
+                        },
+                        "United States": {
+                                "reason": "The US has extensive surveillance capabilities. Connect to privacy-focused countries to protect your data.",
+                                "destinations": [
+                                        { "country": "Switzerland", "features": ["Secure Core", "Kill Switch"], "reason": "Strongest privacy laws, outside 14-Eyes alliance" },
+                                        { "country": "Netherlands", "features": ["Kill Switch"], "reason": "Strong privacy protections, minimal surveillance" },
+                                        { "country": "Germany", "features": ["Secure Core"], "reason": "GDPR pioneer with constitutional protections" }
+                                ]
+                        },
+                        "China": {
+                                "reason": "China has extensive surveillance and censorship. Connect to free internet jurisdictions immediately.",
+                                "destinations": [
+                                        { "country": "Switzerland", "features": ["Secure Core", "Kill Switch", "Smart Routing"], "reason": "Maximum privacy, no censorship, outside all surveillance alliances" },
+                                        { "country": "Netherlands", "features": ["Kill Switch", "Smart Routing"], "reason": "Excellent internet freedom and privacy protections" },
+                                        { "country": "Germany", "features": ["Secure Core", "Smart Routing"], "reason": "Strong digital rights and minimal censorship" }
+                                ]
+                        }
+                },
+                "entertainment": {
+                        "Italy": {
+                                "reason": "Access more content by connecting to countries with larger streaming libraries.",
+                                "destinations": [
+                                        { "country": "United States", "features": ["Kill Switch"], "reason": "Largest streaming content library worldwide" },
+                                        { "country": "United Kingdom", "features": ["Kill Switch"], "reason": "Excellent content access including BBC iPlayer" },
+                                        { "country": "South Korea", "features": ["Kill Switch"], "reason": "Access K-dramas, K-pop, and exclusive Asian content" }
+                                ]
+                        },
+                        "China": {
+                                "reason": "Bypass censorship to access blocked international streaming platforms.",
+                                "destinations": [
+                                        { "country": "United States", "features": ["Kill Switch", "Smart Routing"], "reason": "Access Netflix, Hulu, Disney+ and more" },
+                                        { "country": "Japan", "features": ["Kill Switch", "Smart Routing"], "reason": "Access Japanese streaming and gaming content" },
+                                        { "country": "South Korea", "features": ["Kill Switch", "Smart Routing"], "reason": "K-pop, K-dramas, and Asian entertainment" }
+                                ]
+                        }
+                },
+                "online_regulations": {
+                        "United States": {
+                                "reason": "Enhance your digital rights by connecting to countries with stronger consumer protection.",
+                                "destinations": [
+                                        { "country": "Germany", "features": ["Kill Switch"], "reason": "Leading GDPR enforcement and consumer protection" },
+                                        { "country": "Netherlands", "features": ["Kill Switch"], "reason": "Strong consumer rights without overreach" },
+                                        { "country": "France", "features": ["Kill Switch"], "reason": "Active enforcement of digital rights and platform accountability" }
+                                ]
+                        }
+                }
         }
 };
+
+        // Global state for new features
+        let vpnModal, closeVpnModal, vpnSuggestions, vpnCountryName;
+        let countryListPanel, countryList, sortByDropdown, filterCountriesInput, layerDropdownPanel;
+        let featurePrompts;
+        let currentSortOrder = 'score-desc';
+        let currentFilter = '';
+        let currentHighlightedCountry = null;
+
+        // Country flag emoji mapping
+        const countryFlags = {
+            'Italy': '🇮🇹',
+            'Switzerland': '🇨🇭',
+            'Germany': '🇩🇪',
+            'United States': '🇺🇸',
+            'United Kingdom': '🇬🇧',
+            'France': '🇫🇷',
+            'Netherlands': '🇳🇱',
+            'Spain': '🇪🇸',
+            'Canada': '🇨🇦',
+            'Australia': '🇦🇺',
+            'Japan': '🇯🇵',
+            'South Korea': '🇰🇷',
+            'China': '🇨🇳',
+            'India': '🇮🇳',
+            'Brazil': '🇧🇷'
+        };
 
         // Load privacy data (now just logs since it's embedded)
         function loadPrivacyData() {
@@ -2697,13 +3317,14 @@
         }
 
         // Bottom panel management - initialize after DOM is ready
-        let countryPanel, countryNameEl, countryScoreBadge, layerIndicator, layerDetails, nearbySuggestions, suggestionCountries, closePanel;
+        let countryPanel, countryNameEl, countryScoreBadge, countryScoreNumber, layerIndicator, layerDetails, nearbySuggestions, suggestionCountries, closePanel;
         let selectedCountry = null;
 
         function initializePanelElements() {
             countryPanel = document.getElementById('country-panel');
             countryNameEl = document.getElementById('country-name');
             countryScoreBadge = document.getElementById('country-score-badge');
+            countryScoreNumber = document.getElementById('country-score-number');
             layerIndicator = document.getElementById('layer-indicator');
             layerDetails = document.getElementById('layer-details');
             nearbySuggestions = document.getElementById('nearby-suggestions');
@@ -2715,10 +3336,327 @@
                 closePanel.addEventListener('click', hideCountryPanel);
             }
 
+            // Initialize new feature elements
+            initializeNewFeatures();
+
             console.log('Panel elements initialized:', {
                 countryPanel: !!countryPanel,
                 countryNameEl: !!countryNameEl,
                 layerIndicator: !!layerIndicator
+            });
+        }
+
+        // Initialize new features (VPN modal, country list, feature prompts)
+        function initializeNewFeatures() {
+            // VPN Modal elements
+            vpnModal = document.getElementById('vpn-modal');
+            closeVpnModal = document.getElementById('close-vpn-modal');
+            vpnSuggestions = document.getElementById('vpn-suggestions');
+            vpnCountryName = document.getElementById('vpn-country-name');
+
+            // Country List elements
+            countryListPanel = document.getElementById('country-list-panel');
+            countryList = document.getElementById('country-list');
+            sortByDropdown = document.getElementById('sort-by');
+            filterCountriesInput = document.getElementById('filter-countries');
+            layerDropdownPanel = document.getElementById('layer-dropdown-panel');
+
+            // Feature Prompts elements
+            featurePrompts = document.getElementById('feature-prompts');
+
+            // Event listeners for VPN Modal
+            if (closeVpnModal) {
+                closeVpnModal.addEventListener('click', hideVpnModal);
+            }
+            if (vpnModal) {
+                vpnModal.addEventListener('click', function(e) {
+                    if (e.target === vpnModal) hideVpnModal();
+                });
+            }
+
+            // Event listeners for Country List
+            if (sortByDropdown) {
+                sortByDropdown.addEventListener('change', handleSortChange);
+            }
+            if (filterCountriesInput) {
+                filterCountriesInput.addEventListener('input', handleFilterChange);
+            }
+            if (layerDropdownPanel) {
+                layerDropdownPanel.addEventListener('change', handlePanelLayerChange);
+            }
+
+            // Initialize country list
+            renderCountryList();
+
+            console.log('New features initialized:', {
+                vpnModal: !!vpnModal,
+                countryListPanel: !!countryListPanel,
+                featurePrompts: !!featurePrompts
+            });
+        }
+
+        // VPN Modal Functions
+        function showVpnModal(countryCode, layer) {
+            if (!vpnModal || !vpnSuggestions || !vpnCountryName) return;
+
+            const vpnData = privacyData.vpn_recommendations?.[layer]?.[countryCode];
+
+            // Fallback to generic recommendations
+            if (!vpnData) {
+                const fallbackRecommendations = getCountryRecommendations(countryCode, layer);
+                if (fallbackRecommendations.length === 0) {
+                    alert('No VPN recommendations available for this country and layer.');
+                    return;
+                }
+
+                vpnCountryName.textContent = countryCode;
+                vpnSuggestions.innerHTML = `
+                    <div class="vpn-card-reason">Based on your current location, we recommend connecting to these countries for better ${layer.replace('_', ' ')}:</div>
+                    ${fallbackRecommendations.map(country => `
+                        <div class="vpn-suggestion-card">
+                            <div class="vpn-card-header">
+                                <div class="vpn-country-name">${country}</div>
+                                <button class="vpn-action-btn" onclick="alert('Connect to ${country}')">Connect</button>
+                            </div>
+                            <div class="vpn-card-reason">Better score in ${layer.replace('_', ' ')}</div>
+                            <div class="vpn-features">
+                                <span class="vpn-feature-tag">Kill Switch</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                vpnCountryName.textContent = countryCode;
+                vpnSuggestions.innerHTML = `
+                    <div class="vpn-card-reason">${vpnData.reason}</div>
+                    ${vpnData.destinations.map(dest => `
+                        <div class="vpn-suggestion-card">
+                            <div class="vpn-card-header">
+                                <div class="vpn-country-name">${dest.country}</div>
+                                <button class="vpn-action-btn" onclick="alert('Connecting to ${dest.country}...')">Connect</button>
+                            </div>
+                            <div class="vpn-card-reason">${dest.reason}</div>
+                            <div class="vpn-features">
+                                ${dest.features.map(f => `<span class="vpn-feature-tag">${f}</span>`).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            }
+
+            vpnModal.classList.add('visible');
+        }
+
+        function hideVpnModal() {
+            if (vpnModal) {
+                vpnModal.classList.remove('visible');
+            }
+        }
+
+        // Country List Functions
+        function renderCountryList() {
+            if (!countryList) return;
+
+            const countries = Object.keys(privacyData.countries);
+            let sortedCountries = [...countries];
+
+            // Apply sorting
+            sortedCountries.sort((a, b) => {
+                const dataA = getCountryData(a, currentLayer);
+                const dataB = getCountryData(b, currentLayer);
+
+                switch (currentSortOrder) {
+                    case 'score-desc':
+                        return (dataB?.score || 0) - (dataA?.score || 0);
+                    case 'score-asc':
+                        return (dataA?.score || 0) - (dataB?.score || 0);
+                    case 'name-asc':
+                        return a.localeCompare(b);
+                    case 'name-desc':
+                        return b.localeCompare(a);
+                    default:
+                        return 0;
+                }
+            });
+
+            // Render list
+            countryList.innerHTML = sortedCountries.map(country => {
+                const data = getCountryData(country, currentLayer);
+                const isFiltered = currentFilter && !country.toLowerCase().includes(currentFilter.toLowerCase());
+                const isSelected = selectedCountry === country;
+                const flag = countryFlags[country] || '🌍';
+
+                return `
+                    <div class="country-list-item ${isFiltered ? 'filtered' : ''} ${isSelected ? 'selected' : ''}" data-country="${country}">
+                        <span class="country-flag">${flag}</span>
+                        <div class="country-list-item-info">
+                            <span class="country-list-item-name">${country}</span>
+                            <div class="country-list-item-score-row">
+                                <span class="country-list-item-score">${data?.score.toFixed(1) || 'N/A'}</span>
+                                <span class="country-list-item-badge ${data?.category || 'poor'}">${data?.category || 'N/A'}</span>
+                            </div>
+                        </div>
+                        <button class="country-connect-btn" data-country-btn="${country}">Connect</button>
+                    </div>
+                `;
+            }).join('');
+
+            // Add click listeners for country items
+            document.querySelectorAll('.country-list-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    // Don't trigger if clicking the Connect button
+                    if (e.target.classList.contains('country-connect-btn')) return;
+
+                    const country = item.getAttribute('data-country');
+                    highlightCountryOnMap(country);
+                    showCountryPanel(country, country);
+                    centerOnCountry(country, 4);
+                });
+            });
+
+            // Add click listeners for Connect buttons
+            document.querySelectorAll('.country-connect-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent item click
+                    const country = btn.getAttribute('data-country-btn');
+                    alert(`Connecting to ${country}...`);
+                    // Here you would implement the actual VPN connection logic
+                });
+            });
+        }
+
+        function handleSortChange(e) {
+            currentSortOrder = e.target.value;
+            renderCountryList();
+        }
+
+        function handleFilterChange(e) {
+            currentFilter = e.target.value;
+            renderCountryList();
+        }
+
+        function handlePanelLayerChange(e) {
+            currentLayer = e.target.value;
+
+            // Sync main layer dropdown
+            const mainLayerDropdown = document.getElementById('layer-dropdown');
+            if (mainLayerDropdown) {
+                mainLayerDropdown.value = currentLayer;
+            }
+
+            // Update everything
+            renderCountryList();
+            updatePanelForLayer();
+        }
+
+        function highlightCountryOnMap(countryCode) {
+            // Map country names to SVG IDs (Japan and Italy use class, others use id)
+            const countryNameToIdMap = {
+                'Switzerland': 'CH',
+                'Germany': 'DE',
+                'France': 'FR',
+                'United States': 'US',
+                'United Kingdom': 'GB',
+                'Egypt': 'EG',
+                'China': 'CN',
+                'South Korea': 'KR',
+                'India': 'IN',
+                'Brazil': 'BR',
+                'Australia': 'AU',
+                'Canada': 'CA',
+                'Spain': 'ES',
+                'Netherlands': 'NL'
+            };
+
+            // Remove previous highlight
+            if (currentHighlightedCountry) {
+                const prevId = countryNameToIdMap[currentHighlightedCountry];
+                let prevPaths;
+                if (prevId) {
+                    prevPaths = document.querySelectorAll(`path[id="${prevId}"]`);
+                } else {
+                    prevPaths = document.querySelectorAll(`path[class="${currentHighlightedCountry}"]`);
+                }
+                prevPaths.forEach(path => {
+                    path.classList.remove('country-hover');
+                });
+            }
+
+            // Add new highlight
+            const svgId = countryNameToIdMap[countryCode];
+            let countryPaths;
+            if (svgId) {
+                countryPaths = document.querySelectorAll(`path[id="${svgId}"]`);
+            } else {
+                countryPaths = document.querySelectorAll(`path[class="${countryCode}"]`);
+            }
+
+            console.log(`Highlighting country: ${countryCode}, Found paths: ${countryPaths.length}`);
+
+            countryPaths.forEach(path => {
+                path.classList.add('country-hover');
+            });
+
+            currentHighlightedCountry = countryCode;
+        }
+
+        // Update feature prompts based on country and layer
+        function updateFeaturePrompts(countryCode, layer) {
+            if (!featurePrompts) return;
+
+            const prompts = [];
+
+            // Always show VPN recommendations
+            prompts.push({
+                icon: '🔒',
+                text: 'VPN Recommendations',
+                action: () => showVpnModal(countryCode, layer)
+            });
+
+            // Layer-specific prompts
+            if (layer === 'privacy_freedom') {
+                const countryData = getCountryData(countryCode, layer);
+                if (countryData && countryData.score < 7.0) {
+                    prompts.push({
+                        icon: '🛡️',
+                        text: 'Enable Secure Core',
+                        action: () => alert('Secure Core routes your connection through privacy-safe countries before connecting to your final destination. This protects against network-level attacks.')
+                    });
+                    prompts.push({
+                        icon: '🔪',
+                        text: 'Enable Kill Switch',
+                        action: () => alert('Kill Switch blocks all internet traffic if your VPN connection drops, preventing accidental data leaks.')
+                    });
+                }
+            } else if (layer === 'entertainment') {
+                prompts.push({
+                    icon: '📺',
+                    text: 'Streaming Tips',
+                    action: () => alert('For best streaming experience: 1) Use Kill Switch to prevent location leaks, 2) Connect to fastest server in target country, 3) Clear browser cache if content still blocked')
+                });
+            } else if (layer === 'online_regulations') {
+                prompts.push({
+                    icon: '⚖️',
+                    text: 'Understand Regulations',
+                    action: () => {
+                        const countryData = getCountryData(countryCode, layer);
+                        if (countryData) {
+                            alert(`${countryCode} Online Regulations:\n\n${countryData.description}\n\nFor detailed information, connect to a country with better regulatory protections.`);
+                        }
+                    }
+                });
+            }
+
+            // Render prompts
+            featurePrompts.innerHTML = prompts.map((prompt, index) => `
+                <button class="feature-btn" data-prompt-index="${index}">
+                    ${prompt.icon} ${prompt.text}
+                </button>
+            `).join('');
+
+            // Add event listeners
+            featurePrompts.querySelectorAll('.feature-btn').forEach((btn, index) => {
+                btn.addEventListener('click', prompts[index].action);
             });
         }
 
@@ -2777,15 +3715,24 @@
                 // Fallback for countries not in our dataset
                 countryScoreBadge.textContent = 'N/A';
                 countryScoreBadge.className = 'score-badge poor';
+                if (countryScoreNumber) {
+                    countryScoreNumber.textContent = '-';
+                    countryScoreNumber.className = 'score-number poor';
+                }
                 layerDetails.textContent = `No data available for ${countryCode} in the ${currentLayer.replace('_', ' ')} layer. Data is currently limited to major countries and will be expanded.`;
                 nearbySuggestions.style.display = 'none';
                 return;
             }
 
-            // Update score badge with real data
+            // Update score badge and number with real data
             const scoreClass = countryData.category; // excellent, good, fair, poor
-            countryScoreBadge.textContent = countryData.score.toFixed(1);
+            countryScoreBadge.textContent = scoreClass;
             countryScoreBadge.className = `score-badge ${scoreClass}`;
+
+            if (countryScoreNumber) {
+                countryScoreNumber.textContent = countryData.score.toFixed(1);
+                countryScoreNumber.className = `score-number ${scoreClass}`;
+            }
 
             // Update details with real description
             layerDetails.textContent = countryData.description;
@@ -2799,6 +3746,9 @@
             } else {
                 nearbySuggestions.style.display = 'none';
             }
+
+            // Update feature prompts
+            updateFeaturePrompts(countryCode, currentLayer);
 
             console.log(`Updated panel for ${countryCode} - ${currentLayer}:`, countryData);
         }
@@ -2818,11 +3768,18 @@
 
         // Close panel functionality is now set up in initializePanelElements()
 
-        // Update handleLayerChange to refresh panel
+        // Update handleLayerChange to refresh panel and country list
         const originalHandleLayerChange = handleLayerChange;
         handleLayerChange = function(e) {
             originalHandleLayerChange(e);
+
+            // Sync panel layer dropdown
+            if (layerDropdownPanel) {
+                layerDropdownPanel.value = currentLayer;
+            }
+
             updatePanelForLayer();
+            renderCountryList(); // Re-render country list with new layer data
         };
 
         // Initialize panel elements and detect user's country
@@ -2912,31 +3869,74 @@
 
     <!-- Country Information Panel -->
     <div class="country-panel" id="country-panel">
+        <button class="close-panel" id="close-panel" title="Close panel">×</button>
+
+        <!-- Left section: Country info and score -->
         <div class="country-panel-header">
-            <div>
-                <h2 class="country-name" id="country-name">Select a country</h2>
-                <div class="country-score">
-                    <span class="score-badge" id="country-score-badge">No data</span>
-                    <span class="layer-indicator" id="layer-indicator">Privacy & Freedom</span>
-                </div>
+            <h2 class="country-name" id="country-name">Select a country</h2>
+            <div class="layer-indicator" id="layer-indicator">Privacy & Freedom</div>
+            <div class="country-score-large">
+                <div class="score-number" id="country-score-number">-</div>
+                <span class="score-badge" id="country-score-badge">No data</span>
             </div>
-            <button class="close-panel" id="close-panel" title="Close panel">×</button>
         </div>
 
+        <!-- Right section: Details grid -->
         <div class="country-details" id="country-details">
-            <div class="detail-section">
-                <div class="detail-title">Layer Information</div>
-                <div class="detail-content" id="layer-details">
-                    Click on a country to see detailed information for the selected layer.
+            <div class="info-stat">
+                <div class="info-stat-label">Overview</div>
+                <div class="info-stat-value" id="layer-details">Click on a country to see details</div>
+            </div>
+
+            <div class="info-stat" id="nearby-suggestions" style="display: none;">
+                <div class="info-stat-label">Better options</div>
+                <div class="info-stat-value" id="suggestion-countries">
+                    <!-- Dynamic content -->
                 </div>
             </div>
-        </div>
 
-        <div class="nearby-suggestions" id="nearby-suggestions" style="display: none;">
-            <div class="suggestions-title">Better nearby options for this layer:</div>
-            <div class="suggestion-countries" id="suggestion-countries">
-                <!-- Dynamic content -->
+            <!-- Feature Integration Prompts -->
+            <div class="feature-prompts" id="feature-prompts">
+                <!-- Dynamic buttons will be inserted here based on context -->
             </div>
+        </div>
+    </div>
+
+    <!-- VPN Modal -->
+    <div class="vpn-modal" id="vpn-modal">
+        <div class="vpn-modal-content">
+            <div class="vpn-modal-header">
+                <h3>VPN Recommendations for <span id="vpn-country-name"></span></h3>
+                <button class="close-vpn-modal" id="close-vpn-modal">×</button>
+            </div>
+            <div class="vpn-suggestions" id="vpn-suggestions">
+                <!-- Dynamic VPN cards -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Country List Panel -->
+    <div class="country-list-panel" id="country-list-panel">
+        <div class="panel-header">
+            <div class="panel-title">Countries</div>
+            <select class="layer-dropdown-panel" id="layer-dropdown-panel">
+                <option value="privacy_freedom">🔒 Privacy & Freedom</option>
+                <option value="entertainment">🎬 Entertainment</option>
+                <option value="online_regulations">⚖️ Online Regulations</option>
+            </select>
+        </div>
+        <div class="list-controls">
+            <label class="list-control-label">Sort By</label>
+            <select class="sort-dropdown" id="sort-by">
+                <option value="score-desc">Score (High to Low)</option>
+                <option value="score-asc">Score (Low to High)</option>
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+            </select>
+            <input type="text" class="filter-input" id="filter-countries" placeholder="Search countries...">
+        </div>
+        <div class="country-list" id="country-list">
+            <!-- Dynamic country list items -->
         </div>
     </div>
 </body>
