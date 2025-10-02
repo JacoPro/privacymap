@@ -1815,121 +1815,12 @@
         }
 
         // Function to center map on a specific country with zoom
+        // TEMPORARILY DISABLED - needs fix for coordinate calculation
+        /*
         function centerOnCountry(countryCode, zoomLevel = 4) {
-            console.log(`Attempting to center on: ${countryCode}`);
-
-            // Reset to default view first
-            currentScale = 1;
-            currentX = 0;
-            currentY = 0;
-            updateTransform();
-
-            // Wait for reset animation, then zoom to country
-            setTimeout(() => {
-                // Try finding by class first (Italy, Japan use class)
-                let countryElements = document.querySelectorAll(`#world-map path.${countryCode}`);
-                console.log(`Found ${countryElements.length} elements with class="${countryCode}"`);
-
-            // If not found by class, try by ID
-            if (countryElements.length === 0) {
-                const countryNameToIdMap = {
-                    'Switzerland': 'CH',
-                    'Germany': 'DE',
-                    'France': 'FR',
-                    'United States': 'US',
-                    'United Kingdom': 'GB',
-                    'Egypt': 'EG',
-                    'China': 'CN',
-                    'South Korea': 'KR',
-                    'India': 'IN',
-                    'Brazil': 'BR',
-                    'Australia': 'AU',
-                    'Canada': 'CA',
-                    'Spain': 'ES',
-                    'Netherlands': 'NL'
-                };
-
-                const svgId = countryNameToIdMap[countryCode];
-                if (svgId) {
-                    countryElements = document.querySelectorAll(`#world-map path#${svgId}`);
-                    console.log(`Found ${countryElements.length} elements with id="${svgId}"`);
-                }
-            }
-
-            if (countryElements.length === 0) {
-                console.log(`Country element not found for: ${countryCode}`);
-                return;
-            }
-
-            // Find the largest polygon (mainland) to center on
-            let largestElement = countryElements[0];
-            let largestArea = 0;
-
-            countryElements.forEach((element) => {
-                const bbox = element.getBBox();
-                const area = bbox.width * bbox.height;
-                if (area > largestArea) {
-                    largestArea = area;
-                    largestElement = element;
-                }
-            });
-
-            // Get the bounding box in SVG coordinates
-            const bbox = largestElement.getBBox();
-            const countryCenterX = bbox.x + bbox.width / 2;
-            const countryCenterY = bbox.y + bbox.height / 2;
-
-            // SVG viewBox dimensions
-            const svgViewBoxWidth = 2000;
-            const svgViewBoxHeight = 857;
-
-            // Get the actual rendered SVG dimensions (accounting for aspect ratio)
-            const svgRect = worldMap.getBoundingClientRect();
-            const svgRenderedWidth = svgRect.width;
-            const svgRenderedHeight = svgRect.height;
-
-            // Get container dimensions
-            const containerRect = mapContainer.getBoundingClientRect();
-            const containerWidth = containerRect.width;
-            const containerHeight = containerRect.height;
-
-            // Account for left panel
-            const leftPanelWidth = 340;
-            const availableWidth = containerWidth - leftPanelWidth;
-
-            // Target position (center of available viewport)
-            const targetX = leftPanelWidth + (availableWidth / 2);
-            const targetY = containerHeight / 2;
-
-            // The country center in rendered pixel coordinates (on the unzoomed SVG element)
-            const countryPixelX = (countryCenterX / svgViewBoxWidth) * svgRenderedWidth;
-            const countryPixelY = (countryCenterY / svgViewBoxHeight) * svgRenderedHeight;
-
-            // Set zoom level
-            currentScale = zoomLevel;
-
-            // After transform `translate(currentX, currentY) scale(currentScale)`:
-            // A point at pixel (px, py) on the SVG ends up at viewport position:
-            // viewportX = (px + currentX) * currentScale
-            // viewportY = (py + currentY) * currentScale
-            //
-            // We want the country center to end up at targetX, targetY:
-            // targetX = (countryPixelX + currentX) * currentScale
-            // Solving for currentX:
-            // currentX = (targetX / currentScale) - countryPixelX
-            currentX = (targetX / currentScale) - countryPixelX;
-            currentY = (targetY / currentScale) - countryPixelY;
-
-                console.log(`Centering ${countryCode}:`);
-                console.log(`  SVG viewBox coords: (${countryCenterX.toFixed(1)}, ${countryCenterY.toFixed(1)})`);
-                console.log(`  Rendered pixel coords: (${countryPixelX.toFixed(1)}, ${countryPixelY.toFixed(1)})`);
-                console.log(`  Target viewport: (${targetX.toFixed(1)}, ${targetY.toFixed(1)})`);
-                console.log(`  Scale: ${currentScale}, Translation: (${currentX.toFixed(2)}, ${currentY.toFixed(2)})`);
-
-                // Apply the transform
-                updateTransform();
-            }, 600); // Wait for reset animation to complete
+            // TODO: Fix coordinate transformation calculation
         }
+        */
 
         // Zoom controls
         document.getElementById('zoom-in').addEventListener('click', () => {
@@ -3510,7 +3401,6 @@
                     const country = item.getAttribute('data-country');
                     highlightCountryOnMap(country);
                     showCountryPanel(country, country);
-                    centerOnCountry(country, 4);
                 });
             });
 
@@ -3854,11 +3744,6 @@
             // Detect and show user's country by default
             const userLocation = detectUserCountry();
             showCountryPanel(userLocation.countryCode, userLocation.countryName);
-
-            // Center the map on the detected user's country with closer zoom
-            setTimeout(() => {
-                centerOnCountry(userLocation.countryCode, 6);
-            }, 100);
         }
 
         // Start initialization after DOM is ready
